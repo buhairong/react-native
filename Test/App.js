@@ -21,7 +21,7 @@ export default class App extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>欢迎您</Text>
+        <Text style={styles.welcome}>欢迎您来</Text>
       </View>
     );
   }
@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     margin: 10,
+    color: '#ccc'
   },
   instructions: {
     textAlign: 'center',
