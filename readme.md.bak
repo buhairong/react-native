@@ -1,9 +1,3 @@
-创建React应用
-npm install -g create-react-app
-creact-react-app my-app
-cd my-app
-npm start
-
 安装React Native命令行工具
 npm install -g react-native-cli
 
