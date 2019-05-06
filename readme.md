@@ -22,3 +22,4 @@ react-native init FirstApp
 
 安卓真机运行
 https://www.jianshu.com/p/15cf65fc7a12
+

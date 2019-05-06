@@ -1,13 +1,13 @@
-´´½¨ReactÓ¦ÓÃ
+åˆ›å»ºReactåº”ç”¨
 npm install -g create-react-app
 creact-react-app my-app
 cd my-app
 npm start
 
-°²×°React NativeÃüÁîĞĞ¹¤¾ß
+å®‰è£…React Nativeå‘½ä»¤è¡Œå·¥å…·
 npm install -g react-native-cli
 
-developers.google.cn ÏÂÔØandroid studio
+developers.google.cn ä¸‹è½½android studio
 
 https://developer.android.com/studio/
 https://developer.android.google.cn/
@@ -16,9 +16,10 @@ npm install -g react-native-cli
 
 react-native init FirstApp
 
-´´½¨ÏîÄ¿
+åˆ›å»ºé¡¹ç›®
 react-native init FirstApp
 
 
-°²×¿Õæ»úÔËĞĞ
+å®‰å“çœŸæœºè¿è¡Œ
 https://www.jianshu.com/p/15cf65fc7a12
+
