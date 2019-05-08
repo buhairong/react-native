@@ -49,5 +49,84 @@ function createStackNavigator(routeConfigMap, stackConfig = {}) {
         * card:普通app常用的左右切换
         * modal:上下切换
     * headerMode:导航栏的显示模式：screen：有渐变透明效果，float:无透明效果，none:隐藏导航
+        * float:无透明效果，默认
+        * screen:有渐变透明效果，如微信QQ的一样
+        * none:隐藏导航栏
+    * headerBackTitleVisible: 提供合理的默认值以确定后退按钮标题是否可见，但如果要覆盖它，则可以使用true或false 在此选项中
+        * fade-in-place:标题组件交叉淡入淡出而不移动，类似于ios的Twitter,Instagram和Facebook应用程序。这是默认值
+        * uikit:ios的默认行为的近似值。headerTransitionPreset:指定在启用headerMode:float时header应如何从一个屏幕转换到另一个屏幕
+    * cardStyle:样式 (ios上页面切换会有白色渐变蒙层，想去掉则可以这样设置，cardStyle:{opacity:null},切换页面时的页面边框也在这里可以设置)
+    * onTransitionStart:页面切换开始时的回调函数（我们可以在这里注册一些通知，告知我们切换的状态，方便后面处理页面切换事件）
+    * onTransitionEnd:页面切换结束时的回调函数
 
-   3:09
+###################################################################################################################################
+navigationOptions(屏幕导航选项)
+支持一下参数：
+    * title:可以作为headerTitle的备选字段（当没设置headerTitle时会用该字段作为标题），也可以作为TabNavigator的tabBarLabel以及DrawerNavigator的drawerLabel
+    * header:自定义导航条，可以通过设置null来隐藏导航条
+    * headerTitle: 标题
+    * headerTitleAllowFontScaling:标题是否允许缩放，默认true
+    * headerBackTitle:定义在ios上当前页面进入到下一页面的回退标题，可以通过设置null来禁用它
+    * headerTruncatedBackTitle:当回退标题不能显示的时候显示此属性的标题，比如回退标题太长了
+    * headerBackImage:React元素或组件在标题的后退按钮中显示自定义图片。当组件被调用时，它会在渲染时收到许多props如：（tintColor,title）。默认为带有
+    react-navigation/views/assets/back-icon.png 这张图片的组件，后者是平台的默认后图标图像(ios上为向左的符号，Android上为箭头)
+    * headerRight:定义导航栏右边视图
+    * headerLeft:定义导航栏左边视图
+    * headerStyle:定义导航栏的样式，比如背景色等
+    * headerTitleStyle:定义标题的样式
+    * headerLeftContainerStyle:自定义headerLeft组件容器的样式，例如，增加padding
+    * headerRightContainerStyle:自定义headerRight组件容器的样式，例如，增加padding
+    * headerTitleContainerStyle:自定义headerTitle组件容器的样式，例如，增加padding
+    * headerBackTitleStyle:定义返回标题的样式
+    * headerPressColorAndroid:颜色为材料波纹(Android >= 5.0)
+    * headerTintColor:定义导航条的tintColor,会覆盖headerTitleStyle中的颜色
+    * headerTransparent:默认为false。如果true，则标头将不会有背景，除非您显示提供headerStyle 或 headerBackground
+    * headerBackground:与headerTransparent一起使用，以提供在标题后台呈现的组件。例如：您可以使用模糊视图来创建半透明标题
+    * gesturesEnabled:定义是否能侧滑返回，ios默认true,Android默认false
+    * gestureResponseDistance:定义滑动返回的有效距离，水平状态下默认：25，垂直状态默认135
+    * gestureDirection:设置关闭手势的方向。默认从左向右，可以设置从右到左的滑动操作。
+
+
+案例：使用StackNavigator做界面导航、配置navigationOptions
+
+#第一步：创建一个StackNavigator类型的导航器
+export const AppStackNavigator = createStackNavigator({
+    HomePage: {
+      screen: HomePage
+    },
+    Page1: {
+        screen: Page1,
+        navigationOptions: ({navigation} => ({
+            title: `${navigation.state.params.name}页面名` // 动态设置navigationOptions
+        }))
+    },
+    Page2: {
+        screen: Page2,
+        navigationOptions: { // 在这里定义每个页面的导航属性，静态配置
+            title: "This is Pages"
+        }
+    },
+    Page3: {
+        screen: Page3,
+        navigationOptions: (props) => { //在这里定义每个页面的导航属性，动态配置
+            const {navigation} = props
+            const {state, setParams} = navigation
+            const {params} = state
+            return {
+                title:params.title ? params.title : 'This is Page3',
+                headerRight: (
+                    <Button
+                        title = {params.mode === 'edit' ? '保存' : '编辑'}
+                        onPress = {() => setParams(mode: params.mode === 'edit' ? '' : 'edit')}
+                    />
+                )
+            }
+        }
+    },
+},{
+    defaultNavigationOptions: {
+        // header: null // 可以通过将header设为null 来禁用StackNavigator的Navigation Bar
+    }
+})
+
+8:02
