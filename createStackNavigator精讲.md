@@ -129,4 +129,165 @@ export const AppStackNavigator = createStackNavigator({
     }
 })
 
-8:02
+#第二步：配置navigationOptions：
+
+步骤一的代码中通过两种方式配置了navigationOptions：
+
+静态配置：
+
+对Page2的navigationOptions配置是通过静态配置完成的：
+
+Page2 : {
+    screen: Page2,
+    navigationOptions: { // 在这里定义每个页面的导航属性，静态配置
+        title: "This is Page2"
+    }
+}
+
+这种方式被称为静态配置，因为navigationOptions中的参数是直接Hard Code的不依赖于变量
+
+动态配置：
+
+对Page3的navigationOptions配置是通过动态配置完成的：
+
+Page3: {
+    screen: Page3,
+    navigationOptions: (props) => { // 在这里定义每个页面的导航属性，动态配置
+        const {navigation} = props
+        const {state, setParams} = navigation
+        const {params} = state
+        return {
+            title: params.title ? params.title : 'This is Page3',
+            headerRight: (
+                <Button
+                    title = {params.mode === 'edit' ? '保存' : '编辑'}
+                    onPress = {() => setParams({mode: params.mode === 'edit' ? '' : 'edit'})}
+                />
+            )
+        }
+    }
+}
+
+从上述代码中可以看出Page3的navigationOption依赖于props这个变量所以是动态的，当props中的内容发生变化时，navigationOptions也会跟着变化
+
+提示：除了在创建createStackNavigator时配置navigationOptions外，在StackNavigator之外也可以配置navigationOptions
+
+createStackNavigator之外也可以配置navigationOptions
+
+方式一：
+
+Page2.navigationOptions = {
+    title: "This is Page2"
+}
+
+方式二：
+
+export default class Page1 extends React.Component {
+    // 也可在这里定义每个页面的导航属性，这里的定义会覆盖掉别处的定义
+    static navigationOptions = {
+        title: 'Page1'
+    }
+    ……
+}
+
+#第三步：界面跳转
+
+export default class HomePage extends React.Component {
+    // 在这里定义每个页面的导航属性
+    static navigationOptions = {
+        title: 'Home',
+        headerBackTitle: '返回哈哈', // 设置返回此页面的返回按钮文案，有长度限制
+    }
+
+    render () {
+        const {navigation} = this.props
+        return <View>
+            <Text style={styles.text}>欢迎来到HomePage</Text>
+            <Button
+                title = "Go To Page1"
+                onPress = {() => {
+                    navigation.navigate('Page1', {name: '动态的'})
+                }}
+            />
+            <Button
+                title = "Go To Page2"
+                onPress = {() => {
+                    navigation.navigate('Page2')
+                }}
+            />
+            <Button
+                title = "Go To Page3"
+                onPress = {() => {
+                    navigation.navigate('Page3', {name: 'Devio'})
+                }}
+            />
+        </View>
+    }
+}
+
+页面跳转可分为两步：
+
+1.获取navigation
+
+const {navigation} = this.props
+
+2.通过navigate(routeName, params, action)进行跳转
+
+navigation.navigate('Page2')
+navigation.navigate('Page3', {name: 'Devio'})
+
+这里在跳转到Page3的时候传递了参数{name: 'Devio'}
+
+#第四步：更新页面Params与返回
+export default class Page3 extends React.Component {
+    render () {
+        const {navigation} = this.props
+        const {state, setParams} = navigation
+        const (params) = state
+        const showText = params.mode === 'edit' ? '正在编辑' : '编辑完成'
+        return <View>
+            <Text style = {styles.text}>欢迎来到Page3</Text>
+            <Text style = {styles.showText}>{showText}</Text>
+            <TextInput
+                style = {styles.input}
+                onChangeText = {text => {
+                    setParams({title:text})
+                }}
+            />
+            <Button
+                title = "Go Back"
+                onPress = {() => {
+                    navigation.goBack()
+                }}
+            />
+        </View>
+    }
+}
+
+代码解析：
+
+在上述代码中通过：
+
+<TextInput
+    style = {styles.input}
+    onChangeText = {text => {
+        setParams({title:text})
+    }}
+/>
+
+将输入框中内容的变化，通过setParams({title:text})更新到页面的标题上，你会看到当输入框中内容发生变化时，标题也会跟着变
+
+当用户单机Go Back按钮时，通过：
+
+navigation.goBack()
+
+实现了返回上一页
+
+安装navigation
+npm install --save react-navigation
+
+安装navigation第三方插件，用于tab首次操作
+npm install --save react-native-gesture-handler
+
+将react-native-gesture-handler关联到react-native项目里
+react-native link react-native-gesture-handler
