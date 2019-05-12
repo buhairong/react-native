@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin:0;
+            padding:0;
+        }
+        .clearfix:after{
+            content:'';
+            display:block;
+            clear:both;
+        }
+        ul {
+            list-style: none;
+            margin-top:50px;
+        }
+        .nums li {
+            float: left;
+            width: 90px;
+            text-align: center;
+        }
+        .nums li .num {
+            height: 90px;
+            line-height: 90px;
+            font-size:36px;
+            color: #282c34;
+        }
+        li .en {
+            color: deeppink;
+            font-size: 18px;
+        }
+        .nums .blue {
+            background: blue;
+        }
+        .nums .red {
+            background: red;
+        }
+        .nums .yellow {
+            background: yellow;
+        }
+        .nums .green {
+            background: green;
+        }
+        .color li {
+            margin:20px;
+        }
+        .animal li {
+            float: left;
+            width: 200px;
+            text-align:center;
+            margin:20px;
+        }
+        .animal li .num img{
+            width: 100%
+        }
+    </style>
+</head>
+<body>
+    <ul class="nums clearfix">
+        <li><div class="num">1</div><div class="en">one</div></li>
+        <li><div class="num">2</div><div class="en">two</div></li>
+        <li><div class="num">3</div><div class="en">three</div></li>
+        <li><div class="num">4</div><div class="en">four</div></li>
+        <li><div class="num">5</div><div class="en">five</div></li>
+        <li><div class="num">6</div><div class="en">six</div></li>
+        <li><div class="num">7</div><div class="en">seven</div></li>
+        <li><div class="num">8</div><div class="en">eight</div></li>
+        <li><div class="num">9</div><div class="en">nine</div></li>
+        <li><div class="num">10</div><div class="en">ten</div></li>
+    </ul>
+    <ul class="nums color clearfix">
+        <li><div class="num blue"></div><div class="en">blue</div></li>
+        <li><div class="num green"></div><div class="en">green</div></li>
+        <li><div class="num yellow"></div><div class="en">yellow</div></li>
+        <li><div class="num red"></div><div class="en">red</div></li>
+    </ul>
+    <ul class="animal clearfix">
+        <li><div class="num"><img src="fox.jpg" alt=""></div><div class="en">fox</div></li>
+        <li><div class="num"><img src="candy.jpg" alt=""></div><div class="en">candy</div></li>
+        <li><div class="num"><img src="ice.jpg" alt=""></div><div class="en">ice-cream</div></li>
+        <li><div class="num"><img src="monkey.jpg" alt=""></div><div class="en">monkey</div></li>
+    </ul>
+</body>
+</html>

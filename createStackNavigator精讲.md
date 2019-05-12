@@ -284,10 +284,10 @@ navigation.goBack()
 实现了返回上一页
 
 安装navigation
-npm install --save react-navigation
+yarn add react-navigation
 
 安装navigation第三方插件，用于tab首次操作
-npm install --save react-native-gesture-handler
+yarn add react-native-gesture-handler
 
 将react-native-gesture-handler关联到react-native项目里
 react-native link react-native-gesture-handler
