@@ -70,4 +70,9 @@ createMaterialTapTabNavigator支持的屏幕导航选项的参数有:
     * tabBarTestID：用于在测试中找到该选项卡按钮的ID
 
 #################################################################################################
-案例一：使用 createMaterialTopTabNavigator 做界面导航、配置navigationOptions                     
+案例一：使用 createMaterialTopTabNavigator 做界面导航、配置navigationOptions
+矢量图标第三方库
+yarn add react-native-vector-icons
+react-native link react-native-vector-icon
+
+https://oblador.github.io/react-native-vector-icons/
