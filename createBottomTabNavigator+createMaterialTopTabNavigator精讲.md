@@ -71,6 +71,7 @@ createMaterialTapTabNavigator支持的屏幕导航选项的参数有:
 
 #################################################################################################
 案例一：使用 createMaterialTopTabNavigator 做界面导航、配置navigationOptions
+<<<<<<< HEAD
 
 navigation:navigation prop
 defaultHandler:tab按下的默认处理程序
@@ -132,6 +133,12 @@ TabNavigator的navigationOptions有两个关键的属性，tabBarLabel标签与t
 
 
 
+
+矢量图标第三方库
+yarn add react-native-vector-icons
+react-native link react-native-vector-icon
+
+https://oblador.github.io/react-native-vector-icons/
 
 
 
