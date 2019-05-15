@@ -70,4 +70,82 @@ createMaterialTapTabNavigator支持的屏幕导航选项的参数有:
     * tabBarTestID：用于在测试中找到该选项卡按钮的ID
 
 #################################################################################################
-案例一：使用 createMaterialTopTabNavigator 做界面导航、配置navigationOptions                     
+案例一：使用 createMaterialTopTabNavigator 做界面导航、配置navigationOptions
+
+navigation:navigation prop
+defaultHandler:tab按下的默认处理程序
+
+* tabBarButtonComponent: React组件，它包装图标和标签并实现onPress。默认情况下是TouchableWithoutFeedback的一个封装，使其表现与其他可点击组件相同
+  tabBarButtonComponent: TouchableOpacity将使用TouchableOpacity来替代
+* tabBarAccessibllityLabel:选项卡按钮的辅助功能标签。当用户点击标签时，屏幕阅读器会读取这些信息。如果您没有选项卡的标签，建议设置此项。
+* tabBarTestID: 用于在测试中找到该选项卡按钮的ID
+
+# 第一步：创建一个createBottomTabNavigator类型的导航器
+
+export const AppTabNavigator = createBottomTabNavigator({
+    Page1: {
+        screen: Page1,
+        navigationOptions: {
+            tabBarLabel: 'Page1',
+            tabBarIcon: ({tintColor, focused}) => (
+                <Ionicons
+                    name = {focused ? 'ios-home' : 'ios-home-outline'}
+                    size = {26}
+                />
+            )
+        }
+    },
+    Page2: {
+        screen: Page2,
+        navigationOptions: {
+            tabBarLabel: 'Page2',
+            tabBarIcon: ({tintColor, focused}) => (
+                <Ionicons
+                    name = {focused ? 'ios-people' : 'ios-people-outline'}
+                    size = {26}
+                />
+            )
+        }
+    },
+    Page3: {
+        screen: Page3,
+        navigationOptions: {
+            tabBarLabel: 'Page3',
+            tabBarIcon: ({tintColor, focused}) => (
+                <Ionicons
+                    name = {focused ? 'ios-chatboxes' : 'ios-chatboxes-outline'}
+                    size = {26}
+                />
+            )
+        }
+    }, {
+        tabBarComponent: TabBarComponent,
+        tabBarOptions: {
+            activeTintColor: Platform.OS === 'ios' ? '#e91e63' : '#fff'
+        }
+    }
+})
+
+# 第二步：配置 navigationOptions:
+
+TabNavigator的navigationOptions有两个关键的属性，tabBarLabel标签与tabBarIcon图标：
+
+
+
+
+
+
+
+
+
+######################################################################################################
+【高级案例】 react-navigation 的高级应用
+
+在使用 react-navigation 时往往有些需求通过简单的配置是无法完成的，比如：
+    * 动态配置createBottomTabNavigator：官方只提供了TabNavigator中的页面的静态配置方式，如果TabNavigator中的页面不固定，需要动态生成那么需要怎么做呢？
+    * 动态配置createBottomTabNavigator的样式：通过官方的文档是无法实现动态改变TabNavigator的样式的，比如：修改显示的文字，修改字体颜色，修改图标等等
+    * 多层嵌套后路由个性化定制：createBottomTabNavigator被包裹后在TabNavigator中的页面时无法借助navigation跳转到外层StackNavigator中的页面的，这种应用场景很多，
+      尤其是你需要定制TabNavigator的时候
+    * 初始化传参：如何在设置页面的时候传递参数呢？
+
+类似上述的应用场景有很多，大家可以通过与本课程配套的实战课程进行进一步学习 react-navigation 的高级应用
