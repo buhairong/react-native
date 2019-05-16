@@ -1,7 +1,14 @@
-import {createStackNavigator, createBottomTabNavigator, createMaterialTopTabNavigator, createDrawerNavigator} from 'react-navigation'
+import {
+    createStackNavigator,
+    createBottomTabNavigator,
+    createMaterialTopTabNavigator,
+    createDrawerNavigator,
+    DrawerItems
+} from 'react-navigation'
 import React from 'react'
-import {Button, Platform} from 'react-native'
+import {Button, Platform, ScrollView, SafeAreaView} from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 import HomePage from '../page/HomePage'
 import Page1 from '../page/Page1'
@@ -15,8 +22,44 @@ const DrawerNav = createDrawerNavigator({
         screen: Page4,
         navigationOptions: {
             drawerLabel: 'Page4',
+            drawerIcon: ({tintColor}) => {
+                return <MaterialIcons
+                    name = {'drafts'}
+                    size = {24}
+                    style = {{color: tintColor}}
+                />
+            }
+        }
+    },
+    Page5: {
+        screen: Page5,
+        navigationOptions: {
+            drawerLabel: 'Page5',
+            drawerIcon: ({tintColor}) => {
+                return <MaterialIcons
+                    name = {'move-to-inbox'}
+                    size = {24}
+                    style = {{color: tintColor}}
+                />
+            }
         }
     }
+},{
+    initialRouteName: 'Page4',
+    contentOptions: {
+        activeTintColor: '#e91e63'
+    },
+    contentComponent: (props) => (
+        <ScrollView
+            style = {{backgroundColor: '#789', flex:1}}
+        >
+            <SafeAreaView
+                forceInset = {{top: 'always', horizontal: 'never'}}
+            >
+                <DrawerItems {...props} />
+            </SafeAreaView>
+        </ScrollView>
+    )
 })
 
 const AppTopNavigator = createMaterialTopTabNavigator({
@@ -128,7 +171,7 @@ const AppBottomNavigator = createBottomTabNavigator({
         }
     },{
         tabBarOptions:{
-            activeTintColor: Platform.OS === 'ios' ? '#e91e63' : '#fff',
+            activeTintColor: Platform.OS === 'ios' ? '#e91e63' : '#e91e63',
         }
     }
 )
@@ -188,6 +231,12 @@ export const AppStackNavigator = createStackNavigator({
         screen: AppTopNavigator,
         navigationOptions: { // 在这里定义每个页面的导航数据，静态配置
             title: 'TopNavigator'
+        }
+    },
+    DrawerNav: {
+        screen: DrawerNav,
+        navigationOptions: { // 在这里定义每个页面的导航数据，静态配置
+            title: 'This is DrawerNavigator'
         }
     }
 })
