@@ -1,4 +1,4 @@
-import {createStackNavigator, createBottomTabNavigator, createMaterialTopTabNavigator} from 'react-navigation'
+import {createStackNavigator, createBottomTabNavigator, createMaterialTopTabNavigator, createDrawerNavigator} from 'react-navigation'
 import React from 'react'
 import {Button, Platform} from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -9,6 +9,15 @@ import Page2 from '../page/Page2'
 import Page3 from '../page/Page3'
 import Page4 from '../page/Page4'
 import Page5 from '../page/Page5'
+
+const DrawerNav = createDrawerNavigator({
+    Page4: {
+        screen: Page4,
+        navigationOptions: {
+            drawerLabel: 'Page4',
+        }
+    }
+})
 
 const AppTopNavigator = createMaterialTopTabNavigator({
         Page1:{
