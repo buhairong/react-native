@@ -3,7 +3,8 @@ import {
     createBottomTabNavigator,
     createMaterialTopTabNavigator,
     createDrawerNavigator,
-    DrawerItems
+    DrawerItems,
+    createSwitchNavigator
 } from 'react-navigation'
 import React from 'react'
 import {Button, Platform, ScrollView, SafeAreaView} from 'react-native'
@@ -16,6 +17,36 @@ import Page2 from '../page/Page2'
 import Page3 from '../page/Page3'
 import Page4 from '../page/Page4'
 import Page5 from '../page/Page5'
+import Login from '../page/Login'
+
+const AppStack = createStackNavigator({
+    Home: {
+        screen: HomePage
+    },
+    Page1: {
+        screen: Page1
+    }
+})
+
+const AuthStack = createStackNavigator({
+    Login: {
+        screen: Login
+    }
+},{
+    navigationOptions: {
+        // header: null // 可以通过将header设为null 来禁用StackNavigator的Navigation Bar
+    }
+})
+
+export default createSwitchNavigator(
+    {
+        Auth: AuthStack,
+        App: AppStack
+    },
+    {
+        initialRouteName: 'Auth'
+    }
+)
 
 const DrawerNav = createDrawerNavigator({
     Page4: {
