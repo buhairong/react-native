@@ -243,7 +243,66 @@ VirtualizedList 是 FlatList 与 SectionList 的底层实现。VirtualizedList�
 
     recordInteraction()
 
-20:07
+# 复杂使用
 
-19:25
+下面是一个较复杂的例子，其中演示了如何利用PureComponent来进一步优化性能和减少bug产生的可能：
+
+    * 对于MyListItem组件来说，其onPressItem属性使用箭头函数而非bind的方式进行绑定，使其不会在每次列表重新render时生成一个
+      新的函数，从而保证了props的不变性（当然前提是id、selected和title也没变），不会触发自身无畏的重新render。换句话说，
+      如果你是用bind来绑定onPressItem,每次都会生成一个新的函数，导致props在===比较时返回false,从而触发自身的一次不必要的
+      重新render
+    * 给FlatList指定extraData={this.state}属性，是为了保证state.selected变化时，能够正确触发FlatList的更新。如果不指定
+      此属性，则FlatList不会触发更新，因为它是一个PureComponent,其props在===比较中没有变化则不会触发更新
+    * keyExtractor属性指定使用id作为列表每一项的key
+
+class MyListItem extends React.PureComponent {
+    _onPress = () => {
+        this.props.onPressItem(this.props.id)
+    }
+
+    render () {
+        return (
+            <SomeOtherWidget
+                {...this.props}
+                onPress={this._onPress}
+            />
+        )
+    }
+}
+
+class MyList extends React.PureComponent {
+    state = {selected: (new Map(): Map<string, boolean>)}
+
+    _keyExtractor = (item, index) => item.id
+
+    _onPressItem = (id: string) => {
+        this.setState((state) => {
+            const selected = new Map(state.selected)
+            selected.set(id, !selected.get(id))
+            return {selected}
+        })
+    }
+
+    _renderItem = ({item}) => (
+        <MyListItem
+            id={item.id}
+            onPressItem={this._onPressItem}
+            selected={!!this.state.selected.get(item.id)}
+            title={item.title}
+        />
+    )
+
+    render () {
+        return (
+            <FlatList
+                data = {this.props.data}
+                extraData = {this.state}
+                keyExtractor = {this._keyExtractor}
+                renderItem = {this._renderItem}
+            />
+        )
+    }
+}
+
+# 实例：上拉加载更多，下拉刷新，自定义刷新组件
 
