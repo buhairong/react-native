@@ -75,14 +75,12 @@ export default class SwipeableFlatListDemo extends Component<Props> {
     }
 
     genQuickActions () {
-        return <View style = {styles.quickContainer}>
+        return <View style={styles.quickContainer}>
             <TouchableHighlight
-                onPress = {() => {
-                    alert('确认删除？')
-                }}
+                onPress={()=>alert("确认删除？")}
             >
-                <View>
-                    <Text style = {styles.quick}>删除</Text>
+                <View style={styles.quick}>
+                    <Text style={styles.text}>删除</Text>
                 </View>
             </TouchableHighlight>
         </View>
@@ -145,20 +143,21 @@ const styles = StyleSheet.create({
         color: 'red',
         margin: 10
     },
-    quick: {
-        backgroundColor: 'red',
-        flex: 1,
-        alignItems: 'flex-end',
-        justifyContent: 'center',
+    //侧滑菜单的样式
+    quick:{
+        backgroundColor:"red",
+        flex:1,
+        alignItems:'flex-end',//水平靠右
+        justifyContent:'center',//上下居中
         padding: 10,
         width: 200,
-        color: '#000'
+        elevation: 5
     },
-    quickContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        marginRight: 15,
-        marginBottom: 15
+    quickContainer:{
+        flex:1,
+        flexDirection:'row',
+        justifyContent:'flex-end',
+        marginRight:15,
+        marginBottom:15,
     }
 });
