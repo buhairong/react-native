@@ -140,3 +140,122 @@ function addTodo (text) {
     }
 }
 
+这样做将使action创建函数更容易被移植和测试
+
+
+# reducer
+
+reducer是根据action修改state将其转变成下一个state，记住actions只是描述了有事情发生了这一事实，并没有描述应用如何更新state
+
+(previousState, action) => newState
+
+保持 reducer 纯净非常重要。永远不要在reducer里做这些操作：
+
+    * 修改传入参数
+    * 执行有副作用的操作，如API请求和路由跳转
+    * 调用非纯函数，如 Date.now() 或 Math.random()
+
+    提示：reducer 是纯函数。它仅仅用于计算下一个state。它应该是完全可预测的：多次传入相同的输入必须产生相同的输出。它不应做有
+          副作用的操作。如API调用或路由跳转。这些应该在dispatch action前发生
+
+
+// render
+function todoApp(state = initialState, action){
+    switch(action.type){
+        case SET_VISIBILITY_FILTER
+            return Object.assign({}, state, {
+                visibilityFilter: action.filter
+            })
+        default:
+            return state
+    }
+}
+
+提示：
+
+    * 不要修改state。使用 Object.assign() 新建了一个副本。不能这样使用 Object.assign(state, { visibilityFilter: action.filter })，
+      因为它会改变第一个参数的值。你必须把第一个参数设置为空对象。你也可以开启对ES7提案对象展开运算符的支持，从而使用
+      { ...state.visibilityFilter: action.filter } 达到相同的目的
+    * 在 default 情况下返回旧的 state。遇到未知的 action 时，一定要返回旧的 state
+
+
+# 拆分与合并Reducer
+
+    function onAction(state = defaultState, action) {
+        switch (action.type) {
+            case Types.THEME_CHANGE: // 主题
+                return {
+                    ...state,
+                    theme: action.theme
+                }
+            case Types.SHOW_THEME_VIEW: // 主题
+                return {
+                    ...state,
+                    customThemeViewVisible: action.customThemeViewVisible
+                }
+            case Types.SORT_LANGUAGE: // 排序
+                return Object.assign({}, state, {
+                    checkedArray: action.checkedArray
+                })
+            case Types.REFRESH_ABOUT: // 关于
+                return Object.assign({}, state, {
+                    [action.flag]: {
+                        ...state[action.flag],
+                        projectModels: action.projectModels
+                    }
+                })
+            case Types.ABOUT_SHOW_MORE: // 关于
+                return Object.assign({}, state, {
+                    me: {
+                        ...state.me,
+                        [action.menuFlag]: action.menuShow
+                    }
+                })
+            default:
+                return state
+        }
+    }
+
+上述代码看起来有些冗长，并且主题、排序、关于的更新看起来是相互独立的，能不能将他们拆到单独的函数或文件里呢，答案是可以的
+
+拆分：
+3:33
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
