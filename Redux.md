@@ -219,7 +219,132 @@ function todoApp(state = initialState, action){
 上述代码看起来有些冗长，并且主题、排序、关于的更新看起来是相互独立的，能不能将他们拆到单独的函数或文件里呢，答案是可以的
 
 拆分：
-3:33
+
+// 主题 theme.js
+export default function onTheme(state = defaultState, action) {
+    switch (action.type) {
+        case Types.THEME_CHANGE:
+            return {
+                ...state,
+                theme: action.theme
+            }
+        case Types.SHOW_THEME_VIEW:
+            return {
+                ...state,
+                customThemeViewVisible: action.customThemeViewVisible
+            }
+        default:
+            return state
+    }
+}
+
+// 排序 sort.js
+export default function onSort(state = defaultState, action) {
+    switch (action.type) {
+        case Types.SORT_LANGUAGE:
+            return Object.assign({}, state, {
+                checkedArray: action.checkedArray
+            })
+        default:
+            return state
+    }
+}
+
+// 关于 about.js
+export default function onAbout(state = defaultState, action) {
+    switch (action.type) {
+        case Types.REFRESH_ABOUT:
+            return Object.assign({}, state, {
+                [action.flag]: {
+                    ...state[action.flag],
+                    projectModels: action.projectModels
+                }
+            })
+        case Types.ABOUT_SHOW_MORE:
+            return Object.assign({}, state, {
+                me: {
+                    ...state.me,
+                    [action.menuFlag]: action.menuShow
+                }
+            })
+        default:
+            return state
+    }
+}
+
+在上述代码中，我们将对主题、排序、关于的操作拆到了单独的函数中并放到了不同的文件里，这样一来各个模块的操作就更加的聚合了，
+代码看起来也就更加的简洁明了
+
+合并 reducer
+
+经过上述的步骤我们将一个大的reducer拆分成了不同的小的reducer,但redux原则是只允许一个根reducer,接下来我们需要将这几个小的
+reducer聚合到一个根reducer中
+
+这里我们需要用到Redux 提供的 combineReducers(reducers)
+
+import {combineReducers} from 'redux'
+import theme from './theme'
+import sort from './sort'
+import about from './about'
+
+const index = combineReducers({
+    theme: theme,
+    sort: sort,
+    about: about
+})
+
+export default index
+
+combineReducers() 所做的只是生成一个函数，这个函数来调用你的一系列reducer，每个reducer根据它们的key来筛选出state中的一部分
+数据并处理，然后这个生成的函数再将所有reducer的结果合并成一个大的对象。没有任何魔法。正如其他reducers，如果combineReducers()
+中包含的所有reducers都没有更改state，那么也就不会创建一个新的对象
+
+# Store
+
+是存储state的容器，Store会把两个参数（当前的state树和action）传入reducer
+
+    store有以下职责：
+
+        * 维持应用的 state
+        * 提供 getState() 方法获取state
+        * 提供 dispatch(action) 方法更新state：我们可以在任何地方调用 store.dispatch(action),包括组件中，XMLHttpRequest中，
+          甚至定时器中
+        * 通过 subscribe(listener) 注册监听器
+        * 通过 subscribe(listener) 返回的函数注销监听器
+
+在前一个章节中，我们使用combineReducers()将多个reducer合并成为一个。现在我们通过Redux的createStore()来创建一个Store
+
+import {createStore} from 'redux'
+import todoApp from './reducers'
+
+let store = createStore(todoApp)
+
+# 高级
+# 异步Action
+
+我们上文中所讲的Action都是基于同步实现的，那么对于网络请求数据库加载等应用场景同步Action显然是不适用的，对此我们需要用到
+异步Action
+
+我们可将异步Action简单理解为：在Action中进行异步操作等操作返回后再dispatch一个action
+
+    为了使用异步action我们需要引入redux-thunk库，redux-thunk是为Redux提供异步action支持的中间件
+
+# 使用redux-thunk
+
+    npm install --save redux-thunk
+
+    import thunk from 'redux-thunk'
+
+    let middlewares = {
+        thunk
+    }
+    // 添加异步中间件redux-thunk
+    let createAppStore = applyMiddleware(...middlewares)(createStore)
+
+# 创建异步action
+
+// 7:26
+
 
 
 
