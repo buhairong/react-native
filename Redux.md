@@ -343,44 +343,36 @@ let store = createStore(todoApp)
 
 # 创建异步action
 
-// 7:26
+export function onSearch(inputKey, token, popularKeys) {
+    return dispatch => {
+        dispatch({type: Types.SEARCH_REFRESH})
+        fetch(genFetchUrl(inputKey)).then(response => { // 如果任务取消， 则不做任何处理
+            return checkCancel(token) ? response.json() : null
+        }).then(responseData => {
+            if (!checkCancel(token, true)) { // 如果任务取消，则不做任何处理
+                return
+            }
+            if (!responseData || !responseData.items || responseData.items.length === 0) {
+                dispatch({type: Types.SEARCH_FAIL, message: inputKey + '什么都没找到'})
+                return
+            }
+            let items = responseData.items
+            getFavoriteKeys(inputKey, dispatch, items, token, popularKeys)
+        }).catch(e => {
+            console.log(e)
+            dispatch({type: Types.SEARCH_FAIL, error: e})
+        })
+    }
+}
 
+# 异步数据流
 
+默认情况下，createStore()所创建的Redux store 没有使用 middleware，所以只支持同步数据流
 
+你可以使用applyMiddleware() 来增强 createStore()，它可以帮助你用简便的方式来描述异步的action。
 
+像 redux-thunk 或 redux-promise 这样支持异步的middleware都包装了store的dispatch()方法，以此来让你 dispatch 一些除了action
+以外的其它内容，例如：函数或者 Promise。你所使用任何 middleware都可以以自己的方式解析你 dispatch 的任何内容。并继续传递
+action给下一个middleware。比如，支持Promise的middleware能够拦截Promise,然后为每个Promise异步地dispatch一对begin/end actions
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+当middleware链中的最后一个middleware开始dispatch action时，这个action必须是一个普通对象
