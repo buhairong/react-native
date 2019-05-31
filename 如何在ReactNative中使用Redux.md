@@ -163,7 +163,7 @@ Redux store对象
 
     这里我们使用react-redux提供的<Provider>来包裹我们的根组件，让根组件的所有子组件都能使用 connect() 方法绑定 store
 
-        * 包装 component: //4:35
+        * 包装 component:
 
             function selectTodos(todos, filter) {
                 switch (filter) {
@@ -173,3 +173,107 @@ Redux store对象
                         return todos.filter(todo => todo.completed)
                 }
             }
+
+            // Which props do we want to inject, given the golobal state
+            // Note: use https://github.com/faassen/reselect for better performance
+            function select(state) {
+                return {
+                    visibleTodos: selectTodos(state.todos, state.visibilityFilter),
+                    visibilityFilter: state.visibilityFilter
+                }
+            }
+
+            // 包装 component， 注入 dispatch 和 state 到其默认的 connect(select)(App) 中：
+            export default connect(select)(App)
+
+            通过上述代码我们声明App组件需要整个store中的哪一部分数据作为自己的props，这里用到了connect，我们将select作为
+            参数传给connect，connect会返回一个生成组件函数，然后我们将App组件当做参数传给这个函数
+
+            connect 是一个高阶函数，首先传入mapStateToProps,mapDispatchToProps，然后返回一个生产Component的函数wrapWithConnect,
+            然后再将真正的Component作为参数传入wrapWithConnect(MyComponent)，这样就生产出一个经过包裹的Connect组件
+
+        * 发送(dispatch)action
+
+            render () {
+                // Injected by connect() call
+                const { dispatch, visibleTodos, visibilityFilter } = this.props
+                return (
+                    <View>
+                        <AddTodo
+                            onAddClick = {text =>
+                                dispatch(addTodo(text))
+                            }
+                            toast = {this.toast}
+                        />
+                        <TabBar
+                            filter = {visibilityFilter}
+                            onFilterChange = {nextFilter =>
+                                dispatch(setVisibilityFilter(nextFilter))
+                            }
+                        />
+                        <TodoList
+                            todos = {visibleTodos}
+                            onTodoClick = { index =>
+                                dispatch(completeTodo(index))
+                            }
+                            toast = {this._toast()}
+                        />
+                        <Toast ref={toast => this.toast = toast} />
+                    </View>
+                )
+            }
+
+            在这里我们通过dispatch将action发送到store，store会将这个action分发给reducer,reducer会创建当前state的副本，然后
+            修改该副本并返回一个新的state，这样一来store树将被更新，然后对应组件的props将被更新，从而组件被更新
+
+# 在React Native中使用Redux和react-navigation组合
+
+    在使用 React Navigation 的项目中，想要集成redux就必须要引入 react-navigation-redux-helpers 这个库
+
+# 第一步： 安装react-navigation-redux-helpers
+
+    npm install --save react-navigation-redux-helpers
+
+# 第二步： 配置Navigation
+
+    import React from 'react'
+    import { createStackNavigator, createSwitchNavigator } from 'react-navigation'
+    import { connect } from 'react-redux'
+    import { createReactNavigationReduxMiddleware, reduxifyNavigator } from 'react-navigation-redux-helpers'
+
+    export const rootCon = 'Init' // 设置根路由
+
+    export const RootNavigator = createSwitchNavigator({
+        ...
+    })
+
+    /*
+        1.初始化react-navigation与redux的中间件，
+          该方法的一个很大的作用就是为reduxifyNavigator的key设置actionSubscribers（行为订阅者）
+          设置订阅者 @https://github.com/react-navigation/react-navigation-redux-helpers/blob/master/src/middleware.js #L29
+          检测订阅者是否存在 @https://github.com/react-navigator/react-navigation-redux-helpers/blob/master/src/middleware.js #97
+          @type {Middleware}
+    */
+    export const middleware = createReactNavigationReduxMiddleware(
+        'root',
+        state => state.nav
+    )
+
+    /*
+        2.将根导航器组件传递给 reduxifyNavigator 函数
+          并返回一个将navigation state 和 dispatch 函数作为 props的新组件
+          注意：要在createReactNavigationReduxMiddleware之后执行
+    */
+    const AppWithNavigationState = reduxifyNavigator(RootNavigator, 'root')
+
+    /*
+        State到Props的映射关系
+    */
+    const mapStateToProps = state => ({
+        state: state.nav
+    })
+
+    /*
+        3.连接 React 组件与 Redux store
+    */
+    export default connect(mapStateToProps)(AppWithNavigationState)
