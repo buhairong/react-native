@@ -277,3 +277,92 @@ Redux store对象
         3.连接 React 组件与 Redux store
     */
     export default connect(mapStateToProps)(AppWithNavigationState)
+
+
+# 第二步： 配置 Reducer
+
+    import { combineReducers } from 'redux'
+    import theme from './theme'
+    import { rootCom, RootNavigator } from '../navigator/AppNavigator'
+
+    // 1. 指定默认state
+    const navState = RootNavigator.router.getStateForAction(RootNavigator.router.getActionForPath)
+
+    // 2. 创建自己的 navigation reducer
+    const navReducer = (state = navState, action) => {
+        const nextState = RootNavigator.router.getStateForAction(action, state)
+        // 如果 nextState 为 null或未定义，只需返回原始 state
+        return nextState || state
+    }
+
+    // 3.合并reducer
+    const index = combineReducers({
+        nav: navReducer,
+        theme: theme
+    })
+
+    export default index
+
+#第三步： 配置store
+
+    import {applyMiddleware, createStore} from 'redux'
+    import thunk from 'redux-thunk'
+    import reducers from '../reducer'
+    import {middleware} from '../navigator/AppNavigator'
+
+    const middlewares = {
+        middleware
+    }
+
+    // 创建store
+    export default createStore(reducers, applyMiddleware(...middlewares))
+
+#第四步： 在组件中应用
+
+    import React, {Component} from 'react'
+    import {Provider} from 'react-redux'
+    import AppNavigator from './navigator/AppNavigator'
+    import store from './store'
+
+    type Props = {}
+
+    export default class App extends Component<Props> {
+        render () {
+            // 将store传递给App框架
+            return <Provider store={store}>
+                <AppNavigator />
+            </Provider>
+        }
+    }
+
+经过上述4步呢，我们已经完成了react-navigator + redux 的集成， 那么如何使用它呢？
+
+# 使用 react-navigation + redux
+
+    1.订阅state
+
+    import React from 'react'
+    import {connect} from 'react-redux'
+
+    class TabBarComponent extends React.Component {
+        render () {
+            return (
+                <BottomTabBar
+                    {...this.props}
+                    activeTintColor = {this.props.theme}
+                />
+            )
+        }
+    }
+
+    const mapStateToProps = state => ({
+        theme: state.theme.theme
+    })
+
+    export default connect(mapStateToProps)(TabBarComponent)
+
+    在上述代码中我们订阅了store中的theme state， 然后该组件就可以通过 this.props.theme 获取到所订阅的 theme state 了
+
+    2. 触发action改变state
+
+

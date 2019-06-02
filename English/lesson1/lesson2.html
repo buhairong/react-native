@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin:0;
+            padding:0;
+        }
+        .clearfix:after{
+            content:'';
+            display:block;
+            clear:both;
+        }
+        ul {
+            list-style: none;
+            margin-top:40px;
+        }
+        .nums li {
+            float: left;
+            width: 200px;
+            margin-left:20px;
+        }
+        .nums li .letter {
+            font-size: 60px;
+        }
+        li .en {
+            color: deeppink;
+            font-size: 18px;
+            text-align: center;
+        }
+        .num img{
+            width: 100%
+        }
+    </style>
+</head>
+<body>
+    <ul class="nums clearfix">
+        <li><div class="letter">A</div></li>
+        <li><div class="num"><img src="apple.jpg" alt=""></div><div class="en">apple</div></li>
+        <li><div class="num"><img src="ant.jpg" alt=""></div><div class="en">ant</div></li>
+    </ul>
+    <ul class="nums clearfix">
+        <li><div class="letter">B b</div></li>
+        <li><div class="num"><img src="ball.jpg" alt=""></div><div class="en">ball</div></li>
+        <li><div class="num"><img src="bus.jpg" alt=""></div><div class="en">bus</div></li>
+    </ul>
+    <ul class="nums clearfix">
+        <li><div class="letter">C c</div></li>
+        <li><div class="num"><img src="cat.jpg" alt=""></div><div class="en">cat</div></li>
+        <li><div class="num"><img src="cake.jpg" alt=""></div><div class="en">cake</div></li>
+    </ul>
+    <ul class="nums clearfix">
+        <li><div class="letter">D d</div></li>
+        <li><div class="num"><img src="dog.jpg" alt=""></div><div class="en">dog</div></li>
+        <li><div class="num"><img src="duck.jpg" alt=""></div><div class="en">duck</div></li>
+    </ul>
+</body>
+</html>

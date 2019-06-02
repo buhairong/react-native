@@ -5,6 +5,8 @@ import DetailPage from '../page/DetailPage'
 import {connect} from 'react-redux'
 import {createReactNavigationReduxMiddleware, reduxifyNavigator} from 'react-navigation-redux-helpers'
 
+export const rootCom = 'Init' //设置根路由
+
 const InitNavigator = createStackNavigator({
     WelcomePage: {
         screen: WelcomePage,
@@ -68,3 +70,4 @@ const mapStateToProps = state => ({
     3.连接 React 组件与 Redux store
 */
 export default connect(mapStateToProps)(AppWithNavigationState)
+
