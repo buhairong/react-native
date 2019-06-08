@@ -26,10 +26,7 @@ const MainNavigator = createStackNavigator({
         }
     },
     DetailPage: {
-        screen: DetailPage,
-        navigationOptions: {
-            header: null // 可以通过将header设为null 来禁用StackNavigator的Navigation Bar
-        }
+        screen: DetailPage
     }
 })
 
