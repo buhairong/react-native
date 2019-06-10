@@ -12,7 +12,6 @@
     "react-native-vector-icons": "^6.4.2",
     "react-navigation": "^3.0.9",
     "react-navigation-redux-helpers": "^2.0.9",
-    "react-navigation-tabs": "^0.8.4",
     "react-redux": "^7.0.3",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0"

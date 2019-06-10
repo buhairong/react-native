@@ -5,6 +5,7 @@ import {
     createStackNavigator,
     createAppContainer
 } from 'react-navigation'
+import {connect} from 'react-redux'
 
 import PopularPage from '../page/PopularPage'
 import TrendingPage from '../page/TrendingPage'
@@ -73,7 +74,7 @@ const TABS = { // 在这里配置页面的路由
     }
 }
 
-export default class DynamicTabNavigator extends Component<Props> {
+class DynamicTabNavigator extends Component<Props> {
     constructor(props){
         super(props)
         console.disableYellowBox = true
@@ -84,7 +85,9 @@ export default class DynamicTabNavigator extends Component<Props> {
         const tabs = {PopularPage, TrendingPage, FavoritePage, MyPage} // 根据需要定制显示的tab
         PopularPage.navigationOptions.tabBarLabel = '最热'
         const TabNavigator = createBottomTabNavigator(tabs, {
-            tabBarComponent: TabBarComponent
+            tabBarComponent: props => {
+                return <TabBarComponent theme={this.props.theme} {...props} />
+            }
         })
 
         const StackNavigator = createStackNavigator({
@@ -131,16 +134,8 @@ class TabBarComponent extends Component {
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    }
-});
+const mapStateToProps = state => ({
+    theme: state.theme.theme
+})
+
+export default connect(mapStateToProps)(DynamicTabNavigator)
