@@ -110,3 +110,12 @@ CodePush热更新
 Android打包发布
 ios打包发布
 
+原生代码关联：
+react-native link react-native-gesture-handler
+react-native link react-native-vector-icons
+
+
+
+图标库
+https://oblador.github.io/react-native-vector-icons/
+
