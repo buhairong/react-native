@@ -119,3 +119,10 @@ react-native link react-native-vector-icons
 图标库
 https://oblador.github.io/react-native-vector-icons/
 
+
+使用react-navigation-tabs 2.1.3
+yarn add react-navigation-tabs
+yarn add react-native-reanimated react-native-gesture-handler
+react-native link react-native-reanimated
+react-native link react-native-gesture-handler
+
