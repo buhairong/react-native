@@ -286,7 +286,7 @@ Redux store对象
     import { rootCom, RootNavigator } from '../navigator/AppNavigator'
 
     // 1. 指定默认state
-    const navState = RootNavigator.router.getStateForAction(RootNavigator.router.getActionForPath)
+    const navState = RootNavigator.router.getStateForAction(RootNavigator.router.getActionForPathAndParams(rootCom))
 
     // 2. 创建自己的 navigation reducer
     const navReducer = (state = navState, action) => {
@@ -310,9 +310,9 @@ Redux store对象
     import reducers from '../reducer'
     import {middleware} from '../navigator/AppNavigator'
 
-    const middlewares = {
+    const middlewares = [
         middleware
-    }
+    ]
 
     // 创建store
     export default createStore(reducers, applyMiddleware(...middlewares))
