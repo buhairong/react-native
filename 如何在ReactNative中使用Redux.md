@@ -365,4 +365,34 @@ Redux store对象
 
     2. 触发action改变state
 
+    import React, {Component} from 'react'
+    import {connect} from 'react-redux'
+    import {onThemeChange} from '../action/theme'
+
+    class FavoritePage extends Component<Props> {
+      render() {
+          return (
+            <View style={styles.container}>
+              <Text style={styles.welcome}>FavoritePage</Text>
+              <Button
+                  title="改变主题色"
+                  onPress={() => {
+                      this.props.onThemeChange('#206')
+                  }}
+              />
+            </View>
+          );
+      }
+    }
+
+    const mapStateToProps = state => ({})
+
+    const mapDispatchToProps = dispatch => ({
+        onThemeChange: theme => dispatch(actions.onThemeChange(theme))
+    })
+
+    export default connect(mapStateToProps, mapDispatchToProps)(FavoritePage)
+
+    10:17
+
 
