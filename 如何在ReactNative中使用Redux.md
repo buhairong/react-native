@@ -393,6 +393,60 @@ Redux store对象
 
     export default connect(mapStateToProps, mapDispatchToProps)(FavoritePage)
 
-    10:17
+    触发action有两种方式：
+        * 一种是通过mapDispatchToProps将dispatch创建函数和props绑定，这样就可以通过 this.props.onThemeChange('#096') 调用
+          这个dispatch创建函数来触发onThemeChange action了
+        * 另外一种方式是通过this.props中的navigation来获取dispatch，然后通过这个dispatch手动触发一个action
+
+            let {dispatch} = this.props.navigation
+            dispatch(onThemeChange('red'))
+
+#在Redux+react-navigation场景中处理Android中的物理返回键
+
+    在Redux+react-navigation场景中处理Android的物理返回键需要注意当前路由的所在位置，然后根据指定路由的索引位置来进行操作，
+    这里需要用到BackHandler
+
+    import React, {Component} from 'react'
+    import {BackHandler} from 'react-native'
+    import {NavigationActions} from 'react-navigation'
+    import {connect} from 'react-redux'
+    import DynamicTabNavigator from '../navigator/DynamicTabNavigator'
+    import NavigatorUtil from '../navigator/NavigatorUtil'
+
+    type Props = {}
+
+    class HomePage extends Component<Props> {
+        componentDidMount () {
+            BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
+        }
+
+        componentWillUnmount () {
+            BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
+        }
+
+        /*
+            处理 Android 中的物理返回键
+            https://reactnavigation.org/docs/en/redux-integration.html#handling-the-hardware-back-
+        */
+        onBackPress = () => {
+            const {dispatch, nav} = this.props
+            if (nav.routes[1].index === 0) { // 如果RootNavigator中的MainNavigator的index为0，则不处理
+                return false
+            }
+            dispatch(NavigationAction.back())
+            return true
+        }
+
+        render () {
+            return <DynamicTabNavigator />
+        }
+    }
+
+    const mapStateToProps = state => ({
+        nav: state.nav
+    })
+
+    export default connect(mapStateToProps)(HomePage)
 
 
+emulator -avd a81
