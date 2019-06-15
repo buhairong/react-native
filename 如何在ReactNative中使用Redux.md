@@ -433,7 +433,7 @@ Redux store对象
             if (nav.routes[1].index === 0) { // 如果RootNavigator中的MainNavigator的index为0，则不处理
                 return false
             }
-            dispatch(NavigationAction.back())
+            dispatch(NavigationActions.back())
             return true
         }
 
@@ -448,5 +448,12 @@ Redux store对象
 
     export default connect(mapStateToProps)(HomePage)
 
+#总结
+
+    * 讨论：https://www.zhihu.com/question/50888321
+    * Redux 应用只有一个单一的store,当需要拆分数据处理逻辑时，你应该使用reducer组合而不是创建多个store
+    * redux一个特点是：状态共享，所有的状态都放在一个store中，任何component都可以订阅store中的数据
+    * 并不是所有的state都适合放在store中，这样会让store变得非常庞大，如某个状态只被一个组件使用，不存在状态共享，
+      可以不放在store中
 
 emulator -avd a81
