@@ -12,7 +12,7 @@ export default class FetchDemoPage extends Component<Props> {
         }
     }
 
-    loadData = () => {
+    loadData () {
         let url = `https://api.github.com/search/repositories?q=${this.searchKey}`
         fetch(url)
             .then(response => response.text())
@@ -21,8 +21,26 @@ export default class FetchDemoPage extends Component<Props> {
                     showText: responseText
                 })
             })
+    }
+
+    loadData2 () {
+        let url = `https://api.github.com/search1/repositories?q=${this.searchKey}`
+        fetch(url)
+            .then(response => {
+                if (response.ok) {
+                    return response.text()
+                }
+                throw new Error('Network response was not ok')
+            })
+            .then(responseText => {
+                this.setState({
+                    showText: responseText
+                })
+            })
             .catch(e => {
-                alert(e.toString())
+                this.setState({
+                    showText: e.toString()
+                })
             })
     }
 
@@ -40,7 +58,7 @@ export default class FetchDemoPage extends Component<Props> {
                 <Button
                     title="获取"
                     onPress={() => {
-                        this.loadData()
+                        this.loadData2()
                     }}
                 />
             </View>
