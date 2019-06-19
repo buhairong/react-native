@@ -10,6 +10,7 @@ import HomePage from '../page/HomePage'
 import DetailPage from '../page/DetailPage'
 import FetchDemoPage from '../page/FetchDemoPage'
 import AsyncStorageDemoPage from '../page/AsyncStorageDemoPage'
+import DataStoreDemoPage from '../page/DataStoreDemoPage'
 import {connect} from 'react-redux'
 import {createReactNavigationReduxMiddleware, createReduxContainer} from 'react-navigation-redux-helpers'
 
@@ -45,6 +46,12 @@ const MainNavigator = createStackNavigator({
     },
     AsyncStorageDemoPage: {
         screen: AsyncStorageDemoPage,
+        navigationOptions: {
+            // header: null // 可以通过将header设为null 来禁用StackNavigator的Navigation Bar
+        }
+    },
+    DataStoreDemoPage: {
+        screen: DataStoreDemoPage,
         navigationOptions: {
             // header: null // 可以通过将header设为null 来禁用StackNavigator的Navigation Bar
         }
