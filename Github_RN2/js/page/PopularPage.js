@@ -74,7 +74,7 @@ class PopularTab extends Component<Props> {
         const store = this._store()
         const url = this.genFetchUrl(this.storeName)
         if (loadMore) {
-            onLoadMorePopular(this.storeName, ++store.pageIndex, pageSize, store.items, callback=>{
+            onLoadMorePopular(this.storeName, ++store.pageIndex, pageSize, store.items, callback => {
                 this.refs.toast.show('没有更多了')
             })
         } else {
@@ -144,9 +144,17 @@ class PopularTab extends Component<Props> {
                 }
                 ListFooterComponent={() => this.genIndicator()}
                 onEndReached={() => {
-                    this.loadData(true)
+                    setTimeout(() => {
+                        if (this.canLoadMore) {
+                            this.loadData(true)
+                            this.canLoadMore = false
+                        }
+                    }, 100)
                 }}
                 onEndReachedThreshold={0.5}
+                onMomentumScrollBegin={() => {
+                    this.canLoadMore = true // fix 初始化滚动调用onEndReached的问题
+                }}
               />
                 <Toast
                     ref={'toast'}
@@ -166,6 +174,7 @@ const mapDispatchToProps = dispatch => ({
     onLoadMorePopular: (storeName, pageIndex, pageSize, items, callBack) =>dispatch(actions.onLoadMorePopular(storeName, pageIndex, pageSize, items, callBack))
 })
 
+// 注意： connect只是个function, 并不一定非要放在export后面
 const PopularTabPage = connect(mapStateToProps, mapDispatchToProps)(PopularTab)
 
 const styles = StyleSheet.create({
