@@ -167,7 +167,7 @@ APP页面的顶部开始： 最上面是状态栏，接下来就是导航栏
 
     render () {
         let statusBar = !this.props.statusBar.hidden ?
-            <View style={style.statusBar}>
+            <View style={styles.statusBar}>
                 <StatusBar {...this.props.statusBar} />
             </View> : null
 
@@ -184,7 +184,7 @@ APP页面的顶部开始： 最上面是状态栏，接下来就是导航栏
             </View>
 
         return (
-            <View style=([styles.container,this.props,style])>
+            <View style=([styles.container,this.props.style])>
                 {statusBar}
                 {content}
             </View>
@@ -256,4 +256,5 @@ APP页面的顶部开始： 最上面是状态栏，接下来就是导航栏
         }
     }
 
-    
+设置渐变色
+https://blog.csdn.net/koufulong/article/details/81779323
