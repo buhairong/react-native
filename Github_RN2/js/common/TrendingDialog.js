@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, TouchableOpacity, StyleSheet, View, Text} from 'react-native';
+import {Modal, TouchableOpacity, StyleSheet, View, Text, DeviceInfo} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import TimeSpan from '../model/TimeSpan'
 
@@ -53,12 +53,12 @@ export default class TrendingDialog extends Component {
                                     <Text style={styles.text}>
                                         {arr[i].showText}
                                     </Text>
-                                    {
-                                        i !== TimeSpans.length -1 ? <View
-                                            style={styles.line}
-                                        /> : null
-                                    }
                                 </View>
+                                {
+                                    i !== TimeSpans.length -1 ? <View
+                                        style={styles.line}
+                                    /> : null
+                                }
                             </TouchableOpacity>
                         })}
                     </View>
@@ -72,7 +72,8 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'rgba(0,0,0,0.6)',
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingTop: DeviceInfo.isIPhoneX_deprecated ? 30 : 0
     },
     arrow: {
         marginTop: 40,
