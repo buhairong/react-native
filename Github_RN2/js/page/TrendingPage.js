@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button, FlatList, RefreshControl, ActivityIndicator} from 'react-native';
+import {Platform, StyleSheet, Text, View, Button, FlatList, RefreshControl, ActivityIndicator, DeviceInfo} from 'react-native';
 import {connect} from 'react-redux'
 import actions from '../action/index'
 import {
@@ -9,7 +9,7 @@ import {
 import Toast from 'react-native-easy-toast'
 
 import NavigationBar from '../common/NavigationBar'
-import PopularItem from '../common/PopularItem'
+import TrendingItem from '../common/TrendingItem'
 
 const URL = 'https://github.com/trending/'
 const QUERY_STR = '&sort=stars'
@@ -54,7 +54,8 @@ export default class TrendingPage extends Component<Props> {
                     upperCaseLabel: false, // 是否使标签大写，默认为true
                     scrollEnabled: true, // 是否支持 选项卡滚动， 默认false
                     style: {
-                        backgroundColor: '#678' // TabBar 的背景颜色
+                        backgroundColor: '#678', // TabBar 的背景颜色
+                        height: 30 // fix 开启scrollEnabled后再Android上初次加载时闪烁问题
                     },
                     indicatorStyle: styles.indicatorStyle, // 标签指示器的样式
                     labelStyle: styles.labelStyle, // 文字的样式
@@ -62,7 +63,7 @@ export default class TrendingPage extends Component<Props> {
             }
         )
         const StackNavigatorContainer = createAppContainer(TabNavigator)
-        return <View style={{flex:1}}>
+        return <View style={{flex:1, marginTop: DeviceInfo.isIPhoneX_deprecated ? 30 : 0}}>
             {navigationBar}
             <StackNavigatorContainer/>
         </View>
@@ -111,12 +112,13 @@ class TrendingTab extends Component<Props> {
     }
 
     genFetchUrl(key) {
+        console.log('trending:'+URL + key + '?since=daily')
         return URL + key + '?since=daily'
     }
 
     renderItem(data) {
         const item =data.item
-        return <PopularItem
+        return <TrendingItem
             item={item}
             onSelect={() => {
 
@@ -142,7 +144,7 @@ class TrendingTab extends Component<Props> {
                 <FlatList
                     data={store.projectModes}
                     renderItem={data => this.renderItem(data)}
-                    keyExtractor = {item => '' + item.id}
+                    keyExtractor = {item => '' + (item.id || item.fullName)}
                     refreshControl = {
                         <RefreshControl
                             title={'Loading'}
@@ -193,7 +195,8 @@ const styles = StyleSheet.create({
         flex: 1
     },
     tabStyle: {
-        minWidth: 50
+        //minWidth: 50 // fix minWidth 会导致tabStyle初次加载时闪烁
+        padding: 0
     },
     indicatorStyle: {
         height: 2,
@@ -201,8 +204,7 @@ const styles = StyleSheet.create({
     },
     labelStyle: {
         fontSize: 13,
-        marginTop: 6,
-        marginBottom: 6,
+        margin: 0
     },
     indicatorContainer: {
         alignItems: 'center'

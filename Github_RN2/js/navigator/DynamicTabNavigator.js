@@ -4,6 +4,7 @@ import {
     createAppContainer,
     createBottomTabNavigator
 } from 'react-navigation'
+import {DeviceInfo} from 'react-native'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Entypo from 'react-native-vector-icons/Entypo'
