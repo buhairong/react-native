@@ -188,7 +188,7 @@ class TrendingTab extends Component<Props> {
     }
 
     genFetchUrl(key) {
-        console.log('trending:'+URL + key + '?since=daily')
+        console.log('trending:'+URL + key + '?' + this.timeSpan.searchText)
         return URL + key + '?' + this.timeSpan.searchText
     }
 
