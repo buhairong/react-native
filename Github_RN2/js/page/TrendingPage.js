@@ -12,6 +12,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import NavigationBar from '../common/NavigationBar'
 import TrendingItem from '../common/TrendingItem'
 import TrendingDialog, {TimeSpans} from "../common/TrendingDialog";
+import NavigationUtil from '../navigator/NavigationUtil'
 
 const URL = 'https://github.com/trending/'
 const QUERY_STR = '&sort=stars'
@@ -197,7 +198,9 @@ class TrendingTab extends Component<Props> {
         return <TrendingItem
             item={item}
             onSelect={() => {
-
+                NavigationUtil.goPage({
+                    projectModel:item
+                }, 'DetailPage')
             }}
         />
     }
