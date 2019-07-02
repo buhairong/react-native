@@ -32,7 +32,7 @@ export default class BaseItem extends Component {
         return null
     }
 
-    setFavoriteState () {
+    setFavoriteState (isFavorite) {
         this.props.projectModel.isFavorite = isFavorite
         this.setState({
             isFavorite: isFavorite
