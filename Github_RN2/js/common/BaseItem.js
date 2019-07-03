@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 
 export default class BaseItem extends Component {
     static propTypes = {
-        projectModel: PropTypes.object,
+        projectModels: PropTypes.object,
         onSelect: PropTypes.func,
         onFavorite: PropTypes.func,
     }
@@ -14,7 +14,7 @@ export default class BaseItem extends Component {
     constructor (props) {
         super(props)
         this.state = {
-            isFavorite: this.props.projectModel.isFavorite
+            isFavorite: this.props.projectModels.isFavorite
         }
     }
 
@@ -23,7 +23,7 @@ export default class BaseItem extends Component {
     *   componentWillReceiveProps在新版React中不能再用了
     */
     static getDerivedStateFromProps (nextProps, prevState) {
-        const isFavorite = nextProps.projectModel.isFavorite
+        const isFavorite = nextProps.projectModels.isFavorite
         if (prevState.isFavorite !== isFavorite) {
             return {
                 isFavorite: isFavorite
@@ -33,7 +33,7 @@ export default class BaseItem extends Component {
     }
 
     setFavoriteState (isFavorite) {
-        this.props.projectModel.isFavorite = isFavorite
+        this.props.projectModels.isFavorite = isFavorite
         this.setState({
             isFavorite: isFavorite
         })
@@ -41,7 +41,7 @@ export default class BaseItem extends Component {
 
     onPressFavorite () {
         this.setFavoriteState(!this.state.isFavorite)
-        this.props.onFavorite(this.props.projectModel.item, !this.state.isFavorite)
+        this.props.onFavorite(this.props.projectModels.item, !this.state.isFavorite)
     }
 
     _favoriteIcon () {
@@ -55,9 +55,7 @@ export default class BaseItem extends Component {
                 size={26}
                 style={{color: '#678'}}
             />
-        </TouchableOpacity
-            style={{padding: 6}}
-            underlayColor>
+        </TouchableOpacity>
     }
 }
 

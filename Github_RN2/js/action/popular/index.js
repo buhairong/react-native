@@ -14,7 +14,6 @@ export function onRefreshPopular(storeName, url, pageSize, favoriteDao){
                 handleData(Types.POPULAR_REFRESH_SUCCESS, dispatch, storeName, data, pageSize, favoriteDao)
             })
             .catch(error => {
-                console.log(error)
                 dispatch({type: Types.POPULAR_REFRESH_FAIL, storeName, error})
             })
     }

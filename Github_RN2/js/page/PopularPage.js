@@ -106,11 +106,12 @@ class PopularTab extends Component<Props> {
     _store () {
         const {popular} = this.props
         let store = popular[this.storeName]
+
         if (!store) {
             store = {
                 items: [],
                 isLoading: false,
-                projectModes: [], // 要显示的数据
+                projectModels: [], // 要显示的数据
                 hideLoadingMore: true // 默认隐藏加载更多
             }
         }
@@ -124,10 +125,10 @@ class PopularTab extends Component<Props> {
     renderItem(data) {
         const item =data.item
         return <PopularItem
-            projectModel={item}
+            projectModels={item}
             onSelect={() => {
                 NavigationUtil.goPage({
-                    projectModel:item
+                    projectModels:item
                 }, 'DetailPage')
             }}
             onFavorite={(item, isFavorite) => FavoriteUtil.onFavorite(favoriteDao, item, isFavorite, FLAG_STORAGE.flag_popular)}
@@ -146,11 +147,10 @@ class PopularTab extends Component<Props> {
 
     render() {
         let store = this._store()
-
         return (
             <View style={styles.container}>
               <FlatList
-                data={store.projectModes}
+                data={store.projectModels}
                 renderItem={data => this.renderItem(data)}
                 keyExtractor = {item => '' + item.item.id}
                 refreshControl = {

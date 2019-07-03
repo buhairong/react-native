@@ -13,11 +13,11 @@ type Props = {};
 export default class DetailPage extends Component<Props> {
     constructor (props) {
         super(props)
-        this.params = this.props.navigation.state.params;
-        const {projectModel} = this.params;
+        this.params = this.props.navigation.state.params
+        const {projectModels} = this.params
+        this.url = projectModels.item.html_url || TRENDING_URL + projectModels.item.fullName
 
-        this.url = projectModel.html_url || TRENDING_URL + projectModel.fullName;
-        const title = projectModel.full_name || projectModel.fullName;
+        const title = projectModels.item.full_name || projectModels.item.fullName
         this.state={
             title: title,
             url: this.url,

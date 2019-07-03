@@ -5,8 +5,8 @@ import BaseItem from "./BaseItem";
 
 export default class PopularItem extends BaseItem {
     render () {
-        const {projectModel} = this.props
-        const {item} = projectModel
+        const {projectModels} = this.props
+        const {item} = projectModels
         if (!item || !item.owner) {
             return null
         }

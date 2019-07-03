@@ -189,17 +189,16 @@ class TrendingTab extends Component<Props> {
     }
 
     genFetchUrl(key) {
-        console.log('trending:'+URL + key + '?' + this.timeSpan.searchText)
         return URL + key + '?' + this.timeSpan.searchText
     }
 
     renderItem(data) {
         const item =data.item
         return <TrendingItem
-            item={item}
+            projectModels={item}
             onSelect={() => {
                 NavigationUtil.goPage({
-                    projectModel:item
+                    projectModels:item
                 }, 'DetailPage')
             }}
         />
@@ -221,7 +220,7 @@ class TrendingTab extends Component<Props> {
         return (
             <View style={styles.container}>
                 <FlatList
-                    data={store.projectModes}
+                    data={store.projectModels}
                     renderItem={data => this.renderItem(data)}
                     keyExtractor = {item => '' + (item.id || item.fullName)}
                     refreshControl = {
