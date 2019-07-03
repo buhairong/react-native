@@ -34,8 +34,7 @@ export function onLoadMoreTrending(storeName, pageIndex, pageSize, dataArray = [
                     type: Types.TRENDING_LOAD_MORE_FAIL,
                     error: 'no more',
                     storeName: storeName,
-                    pageIndex: --pageIndex,
-                    projectModels: dataArray
+                    pageIndex: --pageIndex
                 })
             } else {
                 // 本次和载入的最大数量

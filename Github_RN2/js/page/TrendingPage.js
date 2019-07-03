@@ -13,6 +13,9 @@ import NavigationBar from '../common/NavigationBar'
 import TrendingItem from '../common/TrendingItem'
 import TrendingDialog, {TimeSpans} from "../common/TrendingDialog";
 import NavigationUtil from '../navigator/NavigationUtil'
+import FavoriteUtil from "../util/FavoriteUtil"
+import {FLAG_STORAGE} from "../expand/dao/DataStore"
+import FavoriteDao from "../expand/dao/FavoriteDao"
 
 const URL = 'https://github.com/trending/'
 const QUERY_STR = '&sort=stars'
@@ -20,7 +23,10 @@ const THEME_COLOR = '#678'
 const pageSize = 10
 const EVENT_TYPE_TIME_SPAN_CHANGE = 'EVENT_TYPE_TIME_SPAN_CHANGE'
 
+const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_trending)
+
 type Props = {};
+
 export default class TrendingPage extends Component<Props> {
     constructor (props) {
         super(props)
@@ -201,6 +207,7 @@ class TrendingTab extends Component<Props> {
                     projectModels:item
                 }, 'DetailPage')
             }}
+            onFavorite={(item, isFavorite) => FavoriteUtil.onFavorite(favoriteDao, item, isFavorite, FLAG_STORAGE.flag_trending)}
         />
     }
 
