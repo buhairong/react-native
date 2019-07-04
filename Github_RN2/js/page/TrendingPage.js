@@ -268,8 +268,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    onRefreshTrending: (storeName, url, pageSize) =>dispatch(actions.onRefreshTrending(storeName, url, pageSize)),
-    onLoadMoreTrending: (storeName, pageIndex, pageSize, items, callBack) =>dispatch(actions.onLoadMoreTrending(storeName, pageIndex, pageSize, items, callBack))
+    onRefreshTrending: (storeName, url, pageSize, favoriteDao) =>dispatch(actions.onRefreshTrending(storeName, url, pageSize, favoriteDao)),
+    onLoadMoreTrending: (storeName, pageIndex, pageSize, items, favoriteDao, callBack) =>dispatch(actions.onLoadMoreTrending(storeName, pageIndex, pageSize, items, favoriteDao, callBack))
 })
 
 // 注意： connect只是个function, 并不一定非要放在export后面
