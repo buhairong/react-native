@@ -9,6 +9,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Entypo from 'react-native-vector-icons/Entypo'
 import {connect} from 'react-redux'
+import EventBus from 'react-native-event-bus'
 
 import PopularPage from '../page/PopularPage'
 import TrendingPage from '../page/TrendingPage'
@@ -16,6 +17,7 @@ import FavoritePage from '../page/FavoritePage'
 import MyPage from '../page/MyPage'
 import NavigationUtil from './NavigationUtil'
 import {BottomTabBar} from 'react-navigation-tabs'
+import EventTypes from '../util/EventTypes'
 
 type Props = {};
 
@@ -86,7 +88,7 @@ class DynamicTabNavigator extends Component<Props> {
             }
             const {PopularPage, TrendingPage, FavoritePage, MyPage} = TABS
             const tabs = {PopularPage, TrendingPage, FavoritePage, MyPage} // 根据需要定制显示的tab
-            PopularPage.navigationOptions.tabBarLabel = '最新' // 动态配置Tab属性
+            PopularPage.navigationOptions.tabBarLabel = '最热' // 动态配置Tab属性
             const bottomTabNavigator = createBottomTabNavigator(tabs, {
                 tabBarComponent: props => {
                     return <TabBarComponent theme={this.props.theme} {...props} />
@@ -98,7 +100,14 @@ class DynamicTabNavigator extends Component<Props> {
 
       render() {
           const Tab = this._tabNavigator()
-          return <Tab/>
+          return <Tab
+              onNavigationStateChange={(prevState, newState, action) => {
+                  EventBus.getInstance().fireEvent(EventTypes.bottom_tab_select, { // 发送底部tab切换的事件
+                      from: prevState.index,
+                      to: newState.index
+                  })
+              }}
+          />
       }
 }
 
