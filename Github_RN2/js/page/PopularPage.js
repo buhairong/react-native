@@ -242,5 +242,4 @@ const styles = StyleSheet.create({
         color: 'red',
         margin: 10
     }
-});
-//15:48
+})

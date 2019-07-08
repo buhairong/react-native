@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native';
+import {ScrollView, StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux'
 import Feather from 'react-native-vector-icons/Feather'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 import actions from '../action/index'
 import NavigationBar from '../common/NavigationBar'
+import {MORE_MENU} from '../common/MORE_MENU'
+import GlobalStyles from '../res/GlobalStyles'
 
 const THEME_COLOR = '#678'
 
@@ -42,6 +44,10 @@ class MyPage extends Component<Props> {
         </TouchableOpacity>
     }
 
+    onClick (menu) {
+
+    }
+
     render () {
         let statusBar = {
             backgroundColor: THEME_COLOR,
@@ -58,58 +64,57 @@ class MyPage extends Component<Props> {
             />
 
         return (
-            <View style={styles.container}>
+            <View style={GlobalStyles.root_container}>
                 {navigationBar}
-                <Text style={styles.welcome}>MyPage</Text>
-                <Button
-                    title="改变主题色"
-                    onPress={() => {
-                        this.props.onThemeChange('#ff0000')
-                    }}
-                />
-                <Text onPress={() => {
-                    NavigationUtil.goPage({
-                        navigation: this.props.navigation
-                    }, 'DetailPage')
-                }}>跳转到详情页</Text>
-                <Button
-                    title={'Fetch 使用'}
-                    onPress={() => {
-                        NavigationUtil.goPage({
-                            navigation: this.props.navigation
-                        }, 'FetchDemoPage')
-                    }}
-                />
-                <Button
-                    title={'AsyncStorage 使用'}
-                    onPress={() => {
-                        NavigationUtil.goPage({
-                            navigation: this.props.navigation
-                        }, 'AsyncStorageDemoPage')
-                    }}
-                />
-                <Button
-                    title={'离线缓存框架'}
-                    onPress={() => {
-                        NavigationUtil.goPage({
-                            navigation: this.props.navigation
-                        }, 'DataStoreDemoPage')
-                    }}
-                />
+                <ScrollView>
+                    <TouchableOpacity
+                        style={styles.item}
+                        onPress={() => this.onClick(MORE_MENU.About)}
+                    >
+                        <View style={styles.about_left}>
+                            <Ionicons
+                                name={MORE_MENU.About.icon}
+                                size={40}
+                                style={{
+                                    marginRight: 10,
+                                    color: THEME_COLOR
+                                }}
+                            />
+                            <Text>GitHub Popular</Text>
+                        </View>
+                        <Ionicons
+                            name={'ios-arrow-forward'}
+                            size={16}
+                            style={{
+                                marginRight: 10,
+                                alignSelf: 'center',
+                                color: THEME_COLOR
+                            }}
+                        />
+                    </TouchableOpacity>
+                    <View style={GlobalStyles.line} />
+                </ScrollView>
             </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  }
+    container: {
+        flex: 1
+    },
+    about_left: {
+        alignItems: 'center',
+        flexDirection: 'row'
+    },
+    item: {
+        backgroundColor: 'white',
+        padding: 10,
+        height: 90,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexDirection: 'row'
+    }
 });
 
 const mapStateToProps = state => ({})
