@@ -15,37 +15,6 @@ const THEME_COLOR = '#678'
 
 type Props = {};
 class MyPage extends Component<Props> {
-    getRightButton () {
-        return <View style={{flexDirection: 'row'}}>
-                    <TouchableOpacity
-                        onPress={() => {
-
-                        }}
-                    >
-                    <View style={{padding:5,marginRight:8}}>
-                        <Feather
-                            name={'search'}
-                            size={24}
-                            style={{color:'white'}}
-                        />
-                    </View>
-                </TouchableOpacity>
-        </View>
-    }
-
-    getLeftButton(callBack) {
-        return <TouchableOpacity
-            style={{padding:8,paddingLeft:12}}
-            onPress={callBack}
-        >
-            <Ionicons
-                name={'ios-arrow-back'}
-                size={26}
-                style={{color: 'white'}}
-            />
-        </TouchableOpacity>
-    }
-
     onClick (menu) {
         let RouteName, params = {}
         switch (menu) {
@@ -55,6 +24,9 @@ class MyPage extends Component<Props> {
                     title: '教程',
                     url: 'https://coding.m.imooc.com/classindex.html?cid=89'
                 }
+                break
+            case MORE_MENU.About:
+                RouteName = 'AboutPage'
                 break
         }
         if (RouteName) {
@@ -76,8 +48,6 @@ class MyPage extends Component<Props> {
             <NavigationBar
                 title={'我的'}
                 statusBar={statusBar}
-                rightButton={this.getRightButton()}
-                leftButton={this.getLeftButton()}
                 style={{backgroundColor:THEME_COLOR}}
             />
 

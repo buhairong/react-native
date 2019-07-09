@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, Text, View, Image, Dimensions, StyleSheet} from 'react-native';
+import {Platform, Text, View, Image, Dimensions, StyleSheet, DeviceInfo} from 'react-native';
 import BackPressComponent from "../../common/BackPressComponent"
 import NavigationUtil from "../../navigator/NavigationUtil"
 import config from '../../res/data/config'
@@ -8,6 +8,7 @@ import ViewUtil from "../../util/ViewUtil";
 import GlobalStyles from '../../res/styles/GlobalStyles'
 
 const THEME_COLOR = '#678'
+export const FLAG_ABOUT = {flag_about: 'about', flag_about_me: 'about_me'}
 
 export default class AboutCommon {
     constructor (props, updateState) {
@@ -127,6 +128,7 @@ const window = Dimensions.get('window')
 const AVATAR_SIZE = 90
 const PARALLAX_HEADER_HEIGHT = 270
 const STICKY_HEADER_HEIGHT = (Platform.OS === 'ios') ? GlobalStyles.nav_bar_height_ios + 20 : GlobalStyles.nav_bar_height_android
+const TOP = (Platform.OS === 'ios') ? 20 + (DeviceInfo.isIPhoneX_deprecated ? 24 : 0) : 0;
 
 const styles = StyleSheet.create({
     container: {
@@ -142,12 +144,50 @@ const styles = StyleSheet.create({
     },
     stickySection: {
         height: STICKY_HEADER_HEIGHT,
-        width: 300,
-        justifyContent: 'flex-end'
+        alignItems: 'center',
+        paddingTop:TOP
     },
     stickySectionText: {
         color: 'white',
         fontSize: 20,
         margin: 10
-    }
-})
+    },
+    fixedSection: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        paddingRight: 8,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingTop:TOP
+    },
+    fixedSectionText: {
+        color: '#999',
+        fontSize: 20
+    },
+    parallaxHeader: {
+        alignItems: 'center',
+        flex: 1,
+        flexDirection: 'column',
+        paddingTop: 100
+    },
+    avatar: {
+        marginBottom: 10,
+        borderRadius: AVATAR_SIZE / 2
+    },
+    sectionSpeakerText: {
+        color: 'white',
+        fontSize: 24,
+        paddingVertical: 5,
+        marginBottom: 10
+    },
+    sectionTitleText: {
+        color: 'white',
+        fontSize: 16,
+        marginRight: 10,
+        marginLeft: 10
+    },
+});

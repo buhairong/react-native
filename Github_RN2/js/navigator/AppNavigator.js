@@ -7,6 +7,7 @@ import WelcomePage from '../page/WelcomePage'
 import HomePage from '../page/HomePage'
 import DetailPage from '../page/DetailPage'
 import WebViewPage from '../page/WebViewPage'
+import AboutPage from '../page/about/AboutPage'
 import {connect} from 'react-redux'
 import {createReactNavigationReduxMiddleware, createReduxContainer} from 'react-navigation-redux-helpers'
 
@@ -36,6 +37,12 @@ const MainNavigator = createStackNavigator({
     },
     WebViewPage: {
         screen: WebViewPage,
+        navigationOptions: {
+            header: null // 可以通过将header设为null 来禁用StackNavigator的Navigation Bar
+        }
+    },
+    AboutPage: {
+        screen: AboutPage,
         navigationOptions: {
             header: null // 可以通过将header设为null 来禁用StackNavigator的Navigation Bar
         }
