@@ -7,7 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import actions from '../action/index'
 import NavigationBar from '../common/NavigationBar'
 import {MORE_MENU} from '../common/MORE_MENU'
-import GlobalStyles from '../res/GlobalStyles'
+import GlobalStyles from '../res/styles/GlobalStyles'
 import ViewUtil from '../util/ViewUtil'
 import NavigationUtil from '../navigator/NavigationUtil'
 

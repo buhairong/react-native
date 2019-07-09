@@ -125,6 +125,4 @@ yarn add react-navigation-tabs
 yarn add react-native-reanimated react-native-gesture-handler
 react-native link react-native-reanimated
 react-native link react-native-gesture-handler
-react-native link react-native-vector-icons
-react-native link react-native-linear-gradient
 
