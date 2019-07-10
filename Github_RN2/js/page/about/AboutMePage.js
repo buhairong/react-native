@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Linking, StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 import {MORE_MENU} from '../../common/MORE_MENU'
 import GlobalStyles from '../../res/styles/GlobalStyles'
@@ -11,17 +12,21 @@ import config from '../../res/data/config'
 const THEME_COLOR = '#678'
 
 type Props = {};
-export default class AboutPage extends Component<Props> {
+export default class AboutMePage extends Component<Props> {
     constructor (props) {
         super(props)
         this.params = this.props.navigation.state.params
         this.aboutCommon = new AboutCommon({
             ...this.params,
             navigation: this.props.navigation,
-            flagAbout: FLAG_ABOUT.flag_about
+            flagAbout: FLAG_ABOUT.flag_about_me
         }, data => this.setState({...data}))
         this.state = {
-            data: config
+            data: config,
+            showTutorial: true,
+            showBlog: false,
+            showQQ: false,
+            showContact: false,
         }
     }
 
@@ -58,14 +63,19 @@ export default class AboutPage extends Component<Props> {
         return ViewUtil.getMenuItem(() => this.onClick(menu), menu, THEME_COLOR)
     }
 
+    _item (data, isShow, key) {
+        return ViewUtil.getSettingItem(() => {
+            this.setState({
+                [key]: !this.state[key]
+            })
+        }, data.name, THEME_COLOR, Ionicons, data.icon, isShow ? 'ios-arrow-up' : 'ios-arrow-down')
+    }
+
     render () {
         const content = <View>
-            {this.getItem(MORE_MENU.Tutorial)}
+            {this._item(this.state.data.aboutMe.Tutorial, this.state.showTutorial, 'showTutorial')}
             <View style={GlobalStyles.line} />
-            {this.getItem(MORE_MENU.About_Author)}
-            <View style={GlobalStyles.line} />
-            {this.getItem(MORE_MENU.Feedback)}
         </View>
-        return this.aboutCommon.render(content, this.state.data.app)
+        return this.aboutCommon.render(content, this.state.data.author)
     }
 }
