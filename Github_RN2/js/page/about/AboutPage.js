@@ -35,6 +35,9 @@ export default class AboutPage extends Component<Props> {
                     url: 'https://coding.m.imooc.com/classindex.html?cid=89'
                 }
                 break
+            case MORE_MENU.About_Author:
+                RouteName = 'AboutMePage'
+                break
             case MORE_MENU.Feedback:
                 const url = 'mailto://crazycodeboy@gmail.com'
                 Linking.canOpenURL(url)
