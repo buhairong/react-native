@@ -16,6 +16,8 @@ import NavigationUtil from '../navigator/NavigationUtil'
 import FavoriteUtil from "../util/FavoriteUtil"
 import {FLAG_STORAGE} from "../expand/dao/DataStore"
 import FavoriteDao from "../expand/dao/FavoriteDao"
+import {FLAG_LANGUAGE} from "../expand/dao/LanguageDao"
+import ArrayUtil from "../util/ArrayUtil";
 
 const URL = 'https://github.com/trending/'
 const QUERY_STR = '&sort=stars'
@@ -27,22 +29,28 @@ const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_trending)
 
 type Props = {};
 
-export default class TrendingPage extends Component<Props> {
+class TrendingPage extends Component<Props> {
     constructor (props) {
         super(props)
-        this.tabNames=['C', 'C#', 'PHP', 'JavaScript']
         this.state = {
             timeSpan: TimeSpans[0]
         }
+        const {onLoadLanguage} = this.props
+        onLoadLanguage(FLAG_LANGUAGE.flag_language)
+        this.prekeys = []
     }
 
     _genTabs () {
         const tabs = {}
-        this.tabNames.forEach((item, index) => {
-            tabs[`tab${index}`]={
-                screen: props => <TrendingTabPage {...props} timeSpan={this.state.timeSpan} tabLabel={item} />,
-                navigationOptions: {
-                    title: item
+        const {keys} = this.props
+        this.prekeys = keys
+        keys.forEach((item, index) => {
+            if (item.checked) {
+                tabs[`tab${index}`]={
+                    screen: props => <TrendingTabPage {...props} timeSpan={this.state.timeSpan} tabLabel={item.name} />,
+                    navigationOptions: {
+                        title: item.name
+                    }
                 }
             }
         })
@@ -85,7 +93,7 @@ export default class TrendingPage extends Component<Props> {
     }
 
     tabNav () {
-        if (this.Tabs) {
+        if (this.Tabs && ArrayUtil.isEqual(this.prekeys, this.props.keys)) {
             return this.Tabs
         }
 
@@ -141,6 +149,16 @@ export default class TrendingPage extends Component<Props> {
         </View>
     }
 }
+
+const mapPopularStateToProps = state => ({
+    keys: state.language.languages
+})
+
+const mapPopularDispatchToProps = dispatch => ({
+    onLoadLanguage: (flag) => dispatch(actions.onLoadLanguage(flag))
+})
+
+export default connect(mapPopularStateToProps, mapPopularDispatchToProps)(TrendingPage)
 
 class TrendingTab extends Component<Props> {
     constructor(props) {
