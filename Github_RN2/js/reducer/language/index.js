@@ -7,7 +7,6 @@ const defaultState = {
 }
 
 export default function onAction(state = defaultState, action) {
-    console.log("action="+JSON.stringify(action))
     switch (action.type) {
         case Types.LANGUAGE_LOAD_SUCCESS: // 获取数据成功
             if (FLAG_LANGUAGE.flag_key === action.flag) {
