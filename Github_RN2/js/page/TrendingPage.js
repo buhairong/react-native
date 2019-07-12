@@ -116,6 +116,7 @@ class TrendingPage extends Component<Props> {
     }
 
     render () {
+        const {keys} = this.props
         let statusBar = {
             backgroundColor: THEME_COLOR,
             barStyle: 'light-content'
@@ -126,7 +127,7 @@ class TrendingPage extends Component<Props> {
             statusBar={statusBar}
             style = {{backgroundColor: THEME_COLOR}}
         />
-        const TabNavigator = createMaterialTopTabNavigator(
+        const TabNavigator = keys.length ? createMaterialTopTabNavigator(
             this._genTabs(), {
                 tabBarOptions: {
                     tabStyle: styles.tabStyle,
@@ -140,11 +141,11 @@ class TrendingPage extends Component<Props> {
                     labelStyle: styles.labelStyle, // 文字的样式
                 }
             }
-        )
-        const StackNavigatorContainer = this.tabNav()
+        ) : null
+        const StackNavigatorContainer = TabNavigator ? this.tabNav() : null
         return <View style={{flex:1, marginTop: DeviceInfo.isIPhoneX_deprecated ? 30 : 0}}>
             {navigationBar}
-            <StackNavigatorContainer/>
+            {StackNavigatorContainer && <StackNavigatorContainer/>}
             {this.renderTrendingDialog()}
         </View>
     }
