@@ -91,45 +91,37 @@ class SortKeyPage extends Component<Props> {
         }
         // todo 保存排序后的数据
         // 获取排序后的数据
-
         // 更新本地数据
-        this.languageDao.save()
+        this.languageDao.save(this.getSortResult())
+        // 重新加载排序后的标签，以便其他页面能够及时更新
         const {onLoadLanguage} = this.props
         // 更新store
         onLoadLanguage(this.params.flag)
         NavigationUtil.goBack(this.props.navigation)
     }
 
-    renderView () {
-        let dataArray = this.state.keys
-        if (!dataArray || dataArray.length === 0) return
-        let len = dataArray.length
-        let views = []
-        for (let i=0, l=len; i<l;i+=2) {
-            views.push(
-               <View keys={i}>
-                   <View style={styles.item}>
-                       {this.renderCheckBox(dataArray[i], i)}
-                       {i + 1 < len && this.renderCheckBox(dataArray[i+1], i+1)}
-                   </View>
-                   <View style={styles.line}/>
-               </View>
-            )
+    /*
+        获取排序后的标签结果
+    */
+    getSortResult () {
+        const flag = SortKeyPage._flag(this.props)
+        // 从原始数据中复制一份数据出来， 以便对这份数据进行排序
+        let sortResultArray = ArrayUtil.clone(this.props.language[flag])
+        // 获取排序之前的排列顺序
+        const originalCheckedArray = SortKeyPage._keys(this.props)
+        // 变量排序之前的数据， 用排序后的数据checkedArray进行替换
+        for (let i = 0,j = originalCheckedArray.length; i < j; i++) {
+            let item = originalCheckedArray[i]
+            // 找到要替换的元素所在位置
+            let index = this.props.language[flag].indexOf(item)
+            // 进行替换
+            sortResultArray.splice(index, 1, this.state.checkedArray[i])
         }
-        return views
-    }
-
-    onClick (data, index) {
-        data.checked = !data.checked
-        ArrayUtil.updateArray(this.changeValues, data)
-        this.state.keys[index] = data // 更新state以便显示选中状态
-        this.setState({
-            keys: this.state.keys
-        })
+        return sortResultArray
     }
 
     onBack () {
-        if (this.changeValues.length > 0) {
+        if (!ArrayUtil.isEqual(SortKeyPage._keys(this.props), this.state.checkedArray)) {
             Alert.alert('提示', '要保存修改吗？',
                 [
                     {
@@ -211,6 +203,10 @@ class SortCeil extends Component {
         </TouchableHighlight>
     }
 }
+
+const mapPopularStateToProps = state => ({
+    language: state.language
+})
 
 constmapPopularStateToProps = state => ({
     language: state.language
