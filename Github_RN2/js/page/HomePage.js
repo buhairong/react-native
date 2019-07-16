@@ -6,7 +6,9 @@ import {connect} from 'react-redux'
 
 import NavigationUtil from '../navigator/NavigationUtil'
 import DynamicTabNavigator from '../navigator/DynamicTabNavigator'
-import BackPressComponent from "../common/BackPressComponent";
+import BackPressComponent from "../common/BackPressComponent"
+import CustomTheme from '../page/CustomTheme'
+import {onShowCustomThemeView} from "../action/theme/index";
 
 type Props = {};
 
@@ -37,14 +39,33 @@ class HomePage extends Component<Props> {
         return true
     }
 
+    renderCustomThemeView () {
+        const {customThemeViewVisible, onShowCustomThemeView} = this.props
+        return (
+            <CustomTheme
+                visible = {customThemeViewVisible}
+                {...this.props}
+                onClose={() => onShowCustomThemeView(false)}
+            />
+        )
+    }
+
     render () {
         NavigationUtil.navigation = this.props.navigation;
-        return <DynamicTabNavigator />
+        return <View style={{flex:1}}>
+            <DynamicTabNavigator />
+            {this.renderCustomThemeView()}
+        </View>
     }
 }
 
 const mapStateToProps = state => ({
-    nav: state.nav
+    nav: state.nav,
+    customThemeViewVisible: state.theme.customThemeViewVisible
+})
+
+const mapDispatchToProps = dispatch => ({
+    onShowCustomThemeView: (show) => dispatch(actions.onShowCustomThemeView(show))
 })
 
 export default connect(mapStateToProps)(HomePage)

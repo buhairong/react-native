@@ -29,6 +29,10 @@ class MyPage extends Component<Props> {
             case MORE_MENU.About:
                 RouteName = 'AboutPage'
                 break
+            case MORE_MENU.Custom_Theme:
+                const {onShowCustomThemeView} = this.props
+                onShowCustomThemeView(true)
+                break
             case MORE_MENU.Sort_Key:
                 RouteName = 'SortKeyPage'
                 params.flag = FLAG_LANGUAGE.flag_key
@@ -159,10 +163,12 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({
+    theme: state.theme.theme
+})
 
 const mapDispatchToProps = dispatch => ({
-    onThemeChange: theme => dispatch(actions.onThemeChange(theme))
+    onShowCustomThemeView: (show) => dispatch(actions.onShowCustomThemeView(show))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyPage)

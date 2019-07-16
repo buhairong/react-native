@@ -6,7 +6,7 @@ import ThemeDao from '../expand/dao/ThemeDao'
 import GlobalStyles from "../res/styles/GlobalStyles";
 import ThemeFactory, {ThemeFlags} from "../res/styles/ThemeFactory"
 
-export default class CustomTheme extends Component {
+class CustomTheme extends Component {
     constructor (props) {
         super(props)
         this.themeDao = new ThemeDao()
