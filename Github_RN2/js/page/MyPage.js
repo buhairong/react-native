@@ -12,8 +12,6 @@ import ViewUtil from '../util/ViewUtil'
 import NavigationUtil from '../navigator/NavigationUtil'
 import {FLAG_LANGUAGE} from "../expand/dao/LanguageDao";
 
-const THEME_COLOR = '#678'
-
 type Props = {};
 class MyPage extends Component<Props> {
     onClick (menu) {
@@ -58,12 +56,14 @@ class MyPage extends Component<Props> {
     }
 
     getItem (menu) {
-        return ViewUtil.getMenuItem(() => this.onClick(menu), menu, THEME_COLOR)
+        const {theme} = this.props
+        return ViewUtil.getMenuItem(() => this.onClick(menu), menu, theme.themeColor)
     }
 
     render () {
+        const {theme} = this.props
         let statusBar = {
-            backgroundColor: THEME_COLOR,
+            backgroundColor: theme.themeColor,
             barStyle: 'light-content'
         }
 
@@ -71,7 +71,7 @@ class MyPage extends Component<Props> {
             <NavigationBar
                 title={'我的'}
                 statusBar={statusBar}
-                style={{backgroundColor:THEME_COLOR}}
+                style={theme.styles.navBar}
             />
 
         return (
@@ -88,7 +88,7 @@ class MyPage extends Component<Props> {
                                 size={40}
                                 style={{
                                     marginRight: 10,
-                                    color: THEME_COLOR
+                                    color: theme.themeColor
                                 }}
                             />
                             <Text>GitHub Popular</Text>
@@ -99,7 +99,7 @@ class MyPage extends Component<Props> {
                             style={{
                                 marginRight: 10,
                                 alignSelf: 'center',
-                                color: THEME_COLOR
+                                color: theme.themeColor
                             }}
                         />
                     </TouchableOpacity>

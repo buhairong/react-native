@@ -5,6 +5,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import ThemeDao from '../expand/dao/ThemeDao'
 import GlobalStyles from "../res/styles/GlobalStyles";
 import ThemeFactory, {ThemeFlags} from "../res/styles/ThemeFactory"
+import actions from "../action"
 
 class CustomTheme extends Component {
     constructor (props) {

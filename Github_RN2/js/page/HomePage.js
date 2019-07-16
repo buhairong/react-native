@@ -8,7 +8,7 @@ import NavigationUtil from '../navigator/NavigationUtil'
 import DynamicTabNavigator from '../navigator/DynamicTabNavigator'
 import BackPressComponent from "../common/BackPressComponent"
 import CustomTheme from '../page/CustomTheme'
-import {onShowCustomThemeView} from "../action/theme/index";
+import actions from "../action"
 
 type Props = {};
 
@@ -68,4 +68,4 @@ const mapDispatchToProps = dispatch => ({
     onShowCustomThemeView: (show) => dispatch(actions.onShowCustomThemeView(show))
 })
 
-export default connect(mapStateToProps)(HomePage)
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage)
