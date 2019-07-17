@@ -4,6 +4,7 @@ import {_projectModels, doCallBack, handleData} from '../ActionUtil'
 
 const API_URL = 'https://api.github.com/search/repositories?q='
 const QUERY_STR = '&sort=stars'
+const CANCEL_TOKENS = []
 
 /*
     发起搜索
@@ -33,6 +34,20 @@ export function onSearch(inputKey, pageSize, token, favoriteDao, popularKeys, ca
                     inputKey
                 })
             })
+            .catch(e => {
+                console.log(e)
+                dispatch({type: Types.SEARCH_FAIL, error: e})
+            })
+    }
+}
+
+/*
+    取消一个异步任务
+*/
+export function onSearchCancel (token) {
+    return dispatch => {
+        CANCEL_TOKENS.push(token)
+        dispatch({type: Types.SEARCH_CANCEL})
     }
 }
 
@@ -90,5 +105,15 @@ function genFetchUrl (key) {
 }
 
 function hasCancel () {
+    return false
+}
+
+/*
+    检查key是否存在于keys中
+*/
+function checkKeyIsExist (keys, key) {
+    for (let i = 0, l = keys.length; i < l; i++) {
+        if (key.toLowerCase() === keys[i].name.toLowerCase()) return true
+    }
     return false
 }
