@@ -1,6 +1,7 @@
 import Types from '../types'
 import DataStore, {FLAG_STORAGE} from '../../expand/dao/DataStore'
 import {_projectModels, doCallBack, handleData} from '../ActionUtil'
+import ArrayUtil from "../../util/ArrayUtil";
 
 const API_URL = 'https://api.github.com/search/repositories?q='
 const QUERY_STR = '&sort=stars'
@@ -19,7 +20,7 @@ export function onSearch(inputKey, pageSize, token, favoriteDao, popularKeys, ca
             })
             .then(responseData => {
                 // 如果任务取消， 则不做任何处理
-                if (handleData(token)) {
+                if (handleData(token, true)) {
                     console.log('user cancel')
                     return
                 }
@@ -54,7 +55,7 @@ export function onSearchCancel (token) {
 /*
 *   加载更多
 */
-export function onLoadMorePopular(storeName, pageIndex, pageSize, dataArray = [], favoriteDao, callBack) {
+export function onLoadMoreSearch(pageIndex, pageSize, dataArray = [], favoriteDao, callBack) {
     return dispatch => {
         setTimeout(() => { // 模拟网络请求
             if ((pageIndex - 1)*pageSize >= dataArray.length) { // 已加载完全部数据
@@ -62,9 +63,8 @@ export function onLoadMorePopular(storeName, pageIndex, pageSize, dataArray = []
                     callBack('no more')
                 }
                 dispatch({
-                    type: Types.POPULAR_LOAD_MORE_FAIL,
+                    type: Types.SEARCH_LOAD_MORE_FAIL,
                     error: 'no more',
-                    storeName: storeName,
                     pageIndex: --pageIndex
                 })
             } else {
@@ -72,8 +72,7 @@ export function onLoadMorePopular(storeName, pageIndex, pageSize, dataArray = []
                 let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize * pageIndex
                 _projectModels(dataArray.slice(0, max), favoriteDao, data => {
                     dispatch({
-                        type: Types.POPULAR_LOAD_MORE_SUCCESS,
-                        storeName,
+                        type: Types.SEARCH_LOAD_MORE_SUCCESS,
                         pageIndex,
                         projectModels: data
                     })
@@ -83,28 +82,18 @@ export function onLoadMorePopular(storeName, pageIndex, pageSize, dataArray = []
     }
 }
 
-/*
-    刷新收藏状态
-*/
-export function onFlushPopularFavorite(storeName, pageIndex, pageSize, dataArray = [], favoriteDao) {
-    return dispatch => {
-        let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize * pageIndex
-        _projectModels(dataArray.slice(0, max), favoriteDao, data => {
-            dispatch({
-                type: Types.FLUSH_POPULAR_FAVORITE,
-                storeName,
-                pageIndex,
-                projectModels: data
-            })
-        })
-    }
-}
-
 function genFetchUrl (key) {
     return API_URL + key + QUERY_STR
 }
 
-function hasCancel () {
+/*
+    检查指定token是否已经取消
+*/
+function hasCancel (token, isRemove) {
+    if (CANCEL_TOKENS.includes(token)) {
+        isRemove && ArrayUtil.remove(CANCEL_TOKENS, token)
+        return true
+    }
     return false
 }
 
