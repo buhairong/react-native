@@ -45,7 +45,11 @@ export async function _projectModels (showItems, favoriteDao, callback) {
         projectModels.push(new ProjectModel(showItems[i], Utils.checkFavorite(showItems[i], keys)))
     }
 
-    if (typeof callback === 'function') {
-        callback(projectModels)
+    doCallBack(callback, projectModels)
+}
+
+export const doCallBack = (callBack, object) => {
+    if (typeof callBack === 'function') {
+        callBack(object)
     }
 }
