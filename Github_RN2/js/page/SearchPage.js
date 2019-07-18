@@ -19,6 +19,7 @@ import EventTypes from "../util/EventTypes";
 import {FLAG_LANGUAGE} from "../expand/dao/LanguageDao";
 import BackPressComponent from "../common/BackPressComponent";
 import LanguageDao from "../expand/dao/LanguageDao";
+import NavigatorUtil from "../navigator/NavigationUtil";
 
 const URL = 'https://api.github.com/search/repositories?q='
 const QUERY_STR = '&sort=stars'
@@ -49,14 +50,25 @@ class SearchPage extends Component<Props> {
     loadData(loadMore) {
         const {onLoadMoreSearch, onSearch, search, keys} = this.props
         if (loadMore) {
-            onLoadMoreSearch(this.storeName, ++store.pageIndex, pageSize, store.items, favoriteDao, callback => {
+            onLoadMoreSearch(search.pageIndex, pageSize, search.items, this.favoriteDao, callback => {
                 this.refs.toast.show('没有更多了')
             })
-        } else if (refreshFavorite) {
-            onFlushPopularFavorite(this.storeName, store.pageIndex, pageSize, store.items, favoriteDao)
         } else {
-            onRefreshPopular(this.storeName, url, pageSize, favoriteDao)
+            onSearch(this.inputKey, pageSize, this.searchToken = new Date().getTime(), this.favoriteDao, keys, message => {
+                this.refs.toast.show(message)
+            })
         }
+    }
+
+    onBackPress () {
+        const {onSearchCancel, onLoadLanguage} = this.props
+        onSearchCancel() // 退出时取消搜索
+        this.refs.input.blur()
+        NavigatorUtil.goBack(this.props.navigation)
+        if (this.isKeyChange) {
+            onLoadLanguage(FLAG_LANGUAGE.flag_key) // 重新加载标签
+        }
+        return true
     }
 
     /*
@@ -110,20 +122,28 @@ class SearchPage extends Component<Props> {
     }
 
     render() {
-        let store = this._store()
+        const {isLoading, projectModels, showBottomButton, hideLoadingMore} = this.props.search
         const {theme} = this.props
-        return (
-            <View style={styles.container}>
-              <FlatList
-                data={store.projectModels}
+        let statusBar = null
+        if (Platform.OS === 'ios') {
+            statusBar = <View style={[styles.statusBar, {backgroundColor: theme.themeColor}]}/>
+        }
+        let listView = !isLoading ?
+            <FlatList
+                data={projectModels}
                 renderItem={data => this.renderItem(data)}
                 keyExtractor = {item => '' + item.item.id}
+                contentInset = {
+                    {
+                        bottom: 45
+                    }
+                }
                 refreshControl = {
                     <RefreshControl
                         title={'Loading'}
                         titleColor={theme.themeColor}
                         colors={[theme.themeColor]}
-                        refreshing={store.isLoading}
+                        refreshing={isLoading}
                         onRefresh={() => this.loadData()}
                         tintColor={theme.themeColor}
                     />
@@ -141,7 +161,10 @@ class SearchPage extends Component<Props> {
                 onMomentumScrollBegin={() => {
                     this.canLoadMore = true // fix 初始化滚动调用onEndReached的问题
                 }}
-              />
+            /> : null
+        return (
+            <View style={styles.container}>
+
                 <Toast
                     ref={'toast'}
                     position={'center'}
@@ -188,5 +211,9 @@ const styles = StyleSheet.create({
     indicator: {
         color: 'red',
         margin: 10
+    },
+    statusBar: {
+        height: 20,
+
     }
 })
