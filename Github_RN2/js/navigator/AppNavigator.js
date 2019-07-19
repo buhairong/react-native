@@ -11,6 +11,7 @@ import AboutPage from '../page/about/AboutPage'
 import AboutMePage from '../page/about/AboutMePage'
 import CustomKeyPage from '../page/CustomKeyPage'
 import SortKeyPage from '../page/SortKeyPage'
+import SearchPage from '../page/SearchPage'
 import {connect} from 'react-redux'
 import {createReactNavigationReduxMiddleware, createReduxContainer} from 'react-navigation-redux-helpers'
 
@@ -64,6 +65,12 @@ const MainNavigator = createStackNavigator({
     },
     SortKeyPage: {
         screen: SortKeyPage,
+        navigationOptions: {
+            header: null // 可以通过将header设为null 来禁用StackNavigator的Navigation Bar
+        }
+    },
+    SearchPage: {
+        screen: SearchPage,
         navigationOptions: {
             header: null // 可以通过将header设为null 来禁用StackNavigator的Navigation Bar
         }

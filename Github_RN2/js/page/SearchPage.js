@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button, FlatList, RefreshControl, ActivityIndicator, DeviceInfo} from 'react-native';
+import {Platform, StyleSheet, Text, View, TouchableOpacity, FlatList, RefreshControl, ActivityIndicator, TextInput, DeviceInfo} from 'react-native';
 import {connect} from 'react-redux'
 import actions from '../action/index'
 import {
@@ -20,9 +20,9 @@ import {FLAG_LANGUAGE} from "../expand/dao/LanguageDao";
 import BackPressComponent from "../common/BackPressComponent";
 import LanguageDao from "../expand/dao/LanguageDao";
 import NavigatorUtil from "../navigator/NavigationUtil";
-
-const URL = 'https://api.github.com/search/repositories?q='
-const QUERY_STR = '&sort=stars'
+import GlobalStyles from "../res/styles/GlobalStyles";
+import ViewUtil from "../util/ViewUtil"
+import Utils from "../util/Utils"
 
 const pageSize = 10
 
@@ -63,34 +63,12 @@ class SearchPage extends Component<Props> {
     onBackPress () {
         const {onSearchCancel, onLoadLanguage} = this.props
         onSearchCancel() // 退出时取消搜索
-        this.refs.input.blur()
+        this.input.blur()
         NavigatorUtil.goBack(this.props.navigation)
         if (this.isKeyChange) {
             onLoadLanguage(FLAG_LANGUAGE.flag_key) // 重新加载标签
         }
         return true
-    }
-
-    /*
-        获取与当前页面有关的数据
-    */
-    _store () {
-        const {popular} = this.props
-        let store = popular[this.storeName]
-
-        if (!store) {
-            store = {
-                items: [],
-                isLoading: false,
-                projectModels: [], // 要显示的数据
-                hideLoadingMore: true // 默认隐藏加载更多
-            }
-        }
-        return store
-    }
-
-    genFetchUrl(key) {
-        return URL + key + QUERY_STR
     }
 
     renderItem(data) {
@@ -112,13 +90,79 @@ class SearchPage extends Component<Props> {
     }
 
     genIndicator() {
-        return this._store().hideLoadingMore ? null :
+        const {search} = this.props
+        return search.hideLoadingMore ? null :
             <View style={styles.indicatorContainer}>
                 <ActivityIndicator
                     style={styles.indicator}
                 />
                 <Text>正在加载更多</Text>
             </View>
+    }
+
+    /*
+        添加标签
+    */
+    saveKey () {
+        const {keys} = this.props
+        let key = this.inputKey
+        if (Utils.checkKeyIsExist(keys, key)) {
+            this.toast.show(key + '已经存在')
+        } else {
+            key = {
+                'path': key,
+                'name': key,
+                'checked': true
+            }
+            keys.unshift(key) // 将key添加到数组的开头
+            this.languageDao.save(keys)
+            this.toast.show(key.name + '保存成功')
+            this.isKeyChange = true
+        }
+    }
+
+    onRightButtonClick () {
+        const {onSearchCancel, search} = this.props
+        if (search.showText === '搜索') {
+            this.loadData()
+        } else {
+            onSearchCancel(this.searchToken)
+        }
+    }
+
+    renderNavBar () {
+        const {theme} = this.params
+        const {showText, inputKey} = this.props.search
+        const placeholder = inputKey || '请输入'
+        let backButton = ViewUtil.getLeftBackButton(() => this.onBackPress())
+        let inputView = <TextInput
+            ref="input"
+            placeholder={placeholder}
+            onChangeText={text => this.inputKey = text}
+            style={styles.textInput}
+        >
+        </TextInput>
+        let rightButton =
+            <TouchableOpacity
+                onPress={() => {
+                    this.input.blur() // 收起键盘
+                    this.onRightButtonClick()
+                }}
+            >
+                <View style={{marginRight: 10}}>
+                    <Text style={styles.title}>{showText}</Text>
+                </View>
+            </TouchableOpacity>
+        return <View style={{
+            backgroundColor: theme.themeColor,
+            flexDirection: 'row',
+            alignItems: 'center',
+            height: (Platform.OS === 'ios') ? GlobalStyles.nav_bar_height_ios : GlobalStyles.nav_bar_height_android
+        }}>
+            {backButton}
+            {inputView}
+            {rightButton}
+        </View>
     }
 
     render() {
@@ -162,13 +206,35 @@ class SearchPage extends Component<Props> {
                     this.canLoadMore = true // fix 初始化滚动调用onEndReached的问题
                 }}
             /> : null
+
+        let bottomButton = showBottomButton ?
+            <TouchableOpacity
+                style = {[styles.bottomButton, {backgroundColor: theme.themeColor}]}
+                onPress={() => {
+                    this.saveKey()
+                }}
+            >
+                <View style={{justifyContent: 'center'}}>
+                    <Text style={styles.title}>朕收下了</Text>
+                </View>
+            </TouchableOpacity> : null
+        let indicatorView = isLoading ?
+            <ActivityIndicator
+                style={styles.centering}
+                size="large"
+                animating={isLoading}
+            /> : null
+        let resultView = <View>
+            {indicatorView}
+            {listView}
+        </View>
         return (
             <View style={styles.container}>
-
-                <Toast
-                    ref={'toast'}
-                    position={'center'}
-                />
+                {statusBar}
+                {this.renderNavBar()}
+                {resultView}
+                {bottomButton}
+                <Toast ref={toast => this.toast = toast} />
             </View>
         );
     }
@@ -214,6 +280,34 @@ const styles = StyleSheet.create({
     },
     statusBar: {
         height: 20,
-
+    },
+    bottomButton: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        opacity: 0.9,
+        height: 40,
+        position: 'absolute',
+        left: 10,
+        top: GlobalStyles.window_height - 45,
+        right: 10,
+        borderRadius: 3
+    },
+    centering: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1
+    },
+    textInput: {
+        flex: 1,
+        height: (Platform.OS === 'ios') ? 26 : 36,
+        borderWidth: (Platform.OS === 'ios') ? 1 : 0,
+        borderColor: 'white',
+        alignSelf: 'center',
+        paddingLeft: 5,
+        marginRight: 10,
+        marginLeft: 5,
+        borderRadius: 3,
+        opacity: 0.7,
+        color: 'white'
     }
 })

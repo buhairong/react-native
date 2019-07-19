@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button, FlatList, RefreshControl, ActivityIndicator, DeviceInfo} from 'react-native';
+import {Platform, StyleSheet, Text, View, TouchableOpacity, FlatList, RefreshControl, ActivityIndicator, DeviceInfo} from 'react-native';
 import {connect} from 'react-redux'
 import actions from '../action/index'
 import {
@@ -8,6 +8,7 @@ import {
 } from 'react-navigation'
 import Toast from 'react-native-easy-toast'
 import EventBus from 'react-native-event-bus'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 import NavigationBar from '../common/NavigationBar'
 import PopularItem from '../common/PopularItem'
@@ -49,6 +50,27 @@ class PopularPage extends Component<Props> {
         return tabs
     }
 
+    renderRightButton () {
+        const {theme} = this.props
+        return <TouchableOpacity
+            onPress={() => {
+                NavigationUtil.goPage({theme}, 'SearchPage')
+            }}
+        >
+            <View style={{padding: 5, marginRight: 8}}>
+                <Ionicons
+                    name={'ios-search'}
+                    size={24}
+                    style={{
+                        marginRight: 8,
+                        alignSelf: 'center',
+                        color: 'white'
+                    }}
+                />
+            </View>
+        </TouchableOpacity>
+    }
+
     render () {
         const {keys, theme} = this.props
         let statusBar = {
@@ -60,6 +82,9 @@ class PopularPage extends Component<Props> {
             title={'最热'}
             statusBar={statusBar}
             style = {theme.styles.navBar}
+            rightButton={
+                this.renderRightButton()
+            }
         />
         const TabNavigator = keys.length ? createMaterialTopTabNavigator(
             this._genTabs(), {

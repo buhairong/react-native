@@ -2,6 +2,7 @@ import Types from '../types'
 import DataStore, {FLAG_STORAGE} from '../../expand/dao/DataStore'
 import {_projectModels, doCallBack, handleData} from '../ActionUtil'
 import ArrayUtil from "../../util/ArrayUtil";
+import Utils from "../../util/Utils";
 
 const API_URL = 'https://api.github.com/search/repositories?q='
 const QUERY_STR = '&sort=stars'
@@ -31,7 +32,7 @@ export function onSearch(inputKey, pageSize, token, favoriteDao, popularKeys, ca
                 }
                 let items = responseData.items
                 handleData(Types.SEARCH_REFRESH_SUCCESS, dispatch, "", {data: item}, pageSize, favoriteDao, {
-                    showBottomButton: !checkKeyIsExist(popularKeys, inputKey),
+                    showBottomButton: !Utils.checkKeyIsExist(popularKeys, inputKey),
                     inputKey
                 })
             })
@@ -93,16 +94,6 @@ function hasCancel (token, isRemove) {
     if (CANCEL_TOKENS.includes(token)) {
         isRemove && ArrayUtil.remove(CANCEL_TOKENS, token)
         return true
-    }
-    return false
-}
-
-/*
-    检查key是否存在于keys中
-*/
-function checkKeyIsExist (keys, key) {
-    for (let i = 0, l = keys.length; i < l; i++) {
-        if (key.toLowerCase() === keys[i].name.toLowerCase()) return true
     }
     return false
 }
