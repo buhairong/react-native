@@ -39,7 +39,6 @@ export async function _projectModels (showItems, favoriteDao, callback) {
     try {
         // 获取收藏的key
         keys = await favoriteDao.getFavoriteKeys()
-        console.log('_projectModels='+JSON.stringify(keys))
     } catch (e) {
         console.log(e)
     }

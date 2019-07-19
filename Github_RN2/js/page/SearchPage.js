@@ -50,7 +50,7 @@ class SearchPage extends Component<Props> {
     loadData(loadMore) {
         const {onLoadMoreSearch, onSearch, search, keys} = this.props
         if (loadMore) {
-            onLoadMoreSearch(search.pageIndex, pageSize, search.items, this.favoriteDao, callback => {
+            onLoadMoreSearch(++search.pageIndex, pageSize, search.items, this.favoriteDao, callback => {
                 this.toast.show('没有更多了')
             })
         } else {
@@ -145,7 +145,7 @@ class SearchPage extends Component<Props> {
         let rightButton =
             <TouchableOpacity
                 onPress={() => {
-                    this.input.blur() // 收起键盘
+                    this.refs.input.blur() // 收起键盘
                     this.onRightButtonClick()
                 }}
             >
@@ -224,7 +224,7 @@ class SearchPage extends Component<Props> {
                 size="large"
                 animating={isLoading}
             /> : null
-        let resultView = <View>
+        let resultView = <View style={{flex: 1}}>
             {indicatorView}
             {listView}
         </View>
