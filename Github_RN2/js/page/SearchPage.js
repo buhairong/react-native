@@ -51,11 +51,11 @@ class SearchPage extends Component<Props> {
         const {onLoadMoreSearch, onSearch, search, keys} = this.props
         if (loadMore) {
             onLoadMoreSearch(search.pageIndex, pageSize, search.items, this.favoriteDao, callback => {
-                this.refs.toast.show('没有更多了')
+                this.toast.show('没有更多了')
             })
         } else {
             onSearch(this.inputKey, pageSize, this.searchToken = new Date().getTime(), this.favoriteDao, keys, message => {
-                this.refs.toast.show(message)
+                this.toast.show(message)
             })
         }
     }
@@ -73,7 +73,7 @@ class SearchPage extends Component<Props> {
 
     renderItem(data) {
         const item =data.item
-        const {theme} = this.props
+        const {theme} = this.params
         return <PopularItem
             projectModels={item}
             theme={theme}
@@ -167,7 +167,7 @@ class SearchPage extends Component<Props> {
 
     render() {
         const {isLoading, projectModels, showBottomButton, hideLoadingMore} = this.props.search
-        const {theme} = this.props
+        const {theme} = this.params
         let statusBar = null
         if (Platform.OS === 'ios') {
             statusBar = <View style={[styles.statusBar, {backgroundColor: theme.themeColor}]}/>
@@ -309,5 +309,10 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         opacity: 0.7,
         color: 'white'
+    },
+    title: {
+        fontSize: 18,
+        color: 'white',
+        fontWeight: '500'
     }
 })
